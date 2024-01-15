@@ -17,13 +17,40 @@
 	particle_decorate
 	data_decorate
 - application scripts:
+	list_code_analysis
+	analysis_data_from_image
 	workflow_part,
 	workflow_analysis,
 	data_analysis_cycle,
 	getDataAndDiagram,
 	and others.
+## get exp_data
+- data_analysis_cycle.save_exp_20230113_6 #video_bond_traps
+- workflow_analysis.show_bond_image
+- particle_tracking.
+- particle_decorate
 
 ## log:
+- 20240115 edit workflow_analysis.show_bond_image.read_image,draw_bond_exp_hex
+			add points_analysis_2D.bond_plot_module.plot_scale_bar
+- 20240111 add operate_simulation_langevin_wca_yukawa in simulation_core_p.simulation_core_traps
+			add simulation_controller_wca_yukawa in simulation_controller_p
+			add set_new_gsd_file in system_parameters_generators.initial_state_generator
+- 20240105 add example_plot.generate_hertzian,generate_kob_andersen
+- 20231227 add generate_simu_index_csv_depin_special_low_t in 
+			symmetry_transformation_v4_3.simulation_controller.simulation_controller_type_n_part_traps
+- 20231226 add analysis_data_from_image, add_traps_to_points_kagome_part, draw_points_kagome_part,
+			 add_traps_to_points_honeycomb_part, draw_points_honeycomb_part
+- 20231222 add get_cnks_from_csv_type_4569_part, get_cnks_from_csv_files_type_n_part in 
+			symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file
+- 20231221 fix the problem of adding an unnamed column in symmetry_transformation_v4_3.list_code_analysis.
+        	analyze_a_series_of_gsd_fileget_cnks_from_csv_files_type_n
+- 20231219 edit generate_initial_state_hex_particle_XXX_trap_scan_csv, col[i] -> 'col_name' to avoid new unnamed column:0.
+- 20231217 add generate_initial_gsd_hex_and_type_n in symmetry_transformation_v4_3.simulation_controller
+- 20231215 add get_cn5s_from_csv_files in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file
+			edit get_cn_k_from_a_gsd_frame in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_gsd_frame
+- 20231214 add generate_simu_index_csv_type_10_pin_3_30 in 
+			symmetry_transformation_v4_3.simulation_controller.simulation_controller_type_n_part_traps
 - 20231213 add set_new_gsd_file_2types_by_box_or_n_size
 			in symmetry_transformation_v4_3.system_parameters_generators.initial_state_generator
 			edit generate_gaussian in function_plot.example_plot.functions_plot_module
