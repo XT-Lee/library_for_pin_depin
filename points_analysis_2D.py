@@ -1257,12 +1257,12 @@ index 10 is out of bounds for axis 0 with size 10
         trap_filename="/home/tplab/hoomd-examples_0/testhoneycomb3-8-12-part1"
         """
         self.draw_bonds = bond_plot_module()
-        self.draw_bonds.restrict_axis_property_relative(self.points,x_unit=x_unit)
+        self.draw_bonds.restrict_axis_property_relative(x_unit=x_unit)#self.points,
         if not axis_limit is None:
             xlim = [-axis_limit[0],axis_limit[0]]#[0,axis_limit[0]]
             ylim = [-axis_limit[1],axis_limit[1]]#[0,axis_limit[1]]
             self.draw_bonds.restrict_axis_limitation(xlim,ylim)
-        self.draw_bonds.draw_points_with_conditional_bond(self.points,self.bond_length,bond_length_limmit=check)
+        self.draw_bonds.plot_points_with_given_bonds() #draw_points_with_conditional_bond(self.points,self.bond_length,bond_length_limmit=check)
         #self.draw_bonds.draw_bonds_conditional_bond(self.points,self.bond_length,bond_length_limmit=check,x_unit=x_unit)
         if not trap_filename is None:
             self.draw_bonds.plot_traps(trap_filename=trap_filename,LinearCompressionRatio=LinearCompressionRatio)
@@ -2037,7 +2037,7 @@ class dynamic_points_analysis_2d:#old_class_name: msd
         a_frame = static_points_analysis_2d(points=xy_init)
         a_frame.get_first_minima_bond_length_distribution(lattice_constant=1,hist_cutoff=bond_cut_off)#,png_filename=png_filename1
         check=[0.4, a_frame.bond_first_minima_left]
-        bpm.draw_points_with_given_bonds(xy_init,a_frame.bond_length,check,particle_size=particle_size)  
+        bpm.plot_points_with_given_bonds(xy_init,a_frame.bond_length,check,particle_size=particle_size)  
         #draw arrows
         df2 = displacemnt_field_2D(self.txyz_stable,bpm.ax,bpm.fig)  
         ids_in = df2.get_displacement_field_xy_id(frame_init,frame_final)
@@ -2086,7 +2086,7 @@ class dynamic_points_analysis_2d:#old_class_name: msd
         a_frame = static_points_analysis_2d(points=xy_init)
         a_frame.get_first_minima_bond_length_distribution(lattice_constant=1,hist_cutoff=bond_cut_off)#,png_filename=png_filename1
         check=[0.4, a_frame.bond_first_minima_left]
-        bpm.draw_points_with_given_bonds(xy_init,a_frame.bond_length,check,particle_size=particle_size)  
+        bpm.plot_points_with_given_bonds(xy_init,a_frame.bond_length,check,particle_size=particle_size)  
         #draw arrows
         df2 = displacemnt_field_2D(self.txyz_stable,bpm.ax,bpm.fig)  
         df2.get_displacements(frame_final,frame_init)
@@ -3223,7 +3223,19 @@ class bond_plot_module:
         self.ax.set_xlim(xlim[0],xlim[1])
         self.ax.set_ylim(ylim[0],ylim[1])
 
-    def draw_points_with_given_bonds(self,xy,list_bonds_index=None,particle_size=None,bond_color='b',particle_color='k',bond_width=None):
+    def plot_scale_bar(self,tx=-24.5,ty=12,bar_span = 5):
+        tstring = str(bar_span)+' um'
+        zi=2
+        self.ax.text(tx,ty,tstring,horizontalalignment='center',zorder=zi)
+        down_shift = 0.2
+        bar_height = 1
+        lx=[tx-0.5*bar_span,tx+0.5*bar_span]
+        ly=[ty-down_shift-bar_height,ty-down_shift]
+        #ax.plot(lx,ly,c='k',linewidth=4,zorder=zi)
+        list_points_xy = np.array([[lx[0],ly[0]],[lx[1],ly[0]],[lx[1],ly[1]],[lx[0],ly[1]],[lx[0],ly[0]]])
+        self.ax.fill(list_points_xy[:,0],list_points_xy[:,1],facecolor='k',edgecolor='k',linewidth=0.01)
+
+    def plot_points_with_given_bonds(self,xy,list_bonds_index=None,particle_size=None,bond_color='b',particle_color='k',bond_width=None):
         R"""
         Parameters:
             xy: particle positions of a frame, with no one removed.
