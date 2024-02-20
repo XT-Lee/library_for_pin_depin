@@ -50,6 +50,9 @@ class data_decorator:
         caution:
             the shape of data points is not log function, 
             so fitting is of nonsense.
+        
+        idea:
+            maybe i can tune the navg_odd depening on the density of data at each index.
         """
         n2c = coarse_grain_to_n_points
         sz = np.shape(data)#rows for Ndata
@@ -78,3 +81,32 @@ class data_decorator:
                 #print(i,data[in_st:in_ed])
                 data_decorated[i] =np.average(data[in_st:in_ed]) 
         return list_index,data_decorated
+    
+    def coarse_grainize_and_average_data_log_with_dynamic_navg_odd(self,data,coarse_grain_to_n_points=10,navg_odd=5):
+        R"""
+        parameters:
+            data: 1d array with Ndata_points (float)
+            Ndata_points: num of data points
+            coarse_grain_to_n_points(n2c): (int)coarse_grain_to_n_points
+            Navg(navg): num of data points to average, 
+                positive odd integral only(1,3,5...)
+            list_index:
+            data_decorated: n2c rows of data points averaged with (Navg-1) neighbors. 
+
+        return 
+            list_index,
+            data_decorated
+
+        introduction:
+            the 1st data point is not in need of average, but others are. 
+            hence the index of last data point must be set smaller than 
+            Ndata_points - (Navg-1)/2
+
+        caution:
+            the shape of data points is not log function, 
+            so fitting is of nonsense.
+        
+        idea:
+            maybe i can tune the navg_odd depening on the density of data at each index.
+        """
+        pass

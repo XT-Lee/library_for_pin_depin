@@ -1,4 +1,4 @@
-import points_analysis_2D as pa
+import points_analysis_2D_freud as pa
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -341,7 +341,7 @@ class workflow_file_to_data:
         gsd_data.get_trajectory_data()
         return gsd_data.txyz
     def what_others(self):
-        import points_analysis_2D as pa
+        import points_analysis_2D_freud as pa
         
         import proceed_file as pf
         gsd_data = pf.proceed_gsd_file(None,'remote',4302,9)
@@ -1379,9 +1379,6 @@ class show_disp_field:
     
     def get_points_plot(self):
         #self.test_patch()
-        
-        
-        
         prefix = '/home/remote/Downloads/4302_9/'
         prefix_write='/home/remote/Downloads/4302_9/'
         filename_txyz = prefix+'txyz_stable.npy'
@@ -3186,6 +3183,40 @@ class archimedean_tilings:
         #dimensions=2
         self.position = np.array([[0,0,0],[0.5,0.5*rt,0]])*a
 
+    def generate_cairo(self,a):#let the edge lengths of pentagons are 0.5*[1+sqrt(3)] or 1
+        rt = math.sqrt(3)
+        #uc = hoomd.lattice.unitcell
+        #N=12,
+        self.a1 = np.array([0.5*(6+2*rt),0,0])*a
+        self.a2 = np.array([0,0.5*(6+2*rt),0])*a
+        self.a3 = np.array([0,0,0])
+        #the shape is a bow upward /--\_ where edge of square & triangle is 2*sqrt(3)
+        self.position=np.array([
+                    [0,0,0], [0.5*(4+2*rt), 0, 0],
+                    [0.5*(2+rt),0.5,0],
+                    [0.5*(0.5+0.5*rt),0.5*(1.5+0.5*rt),0],[0.5*(3.5+1.5*rt),0.5*(1.5+0.5*rt),0],
+                    [0.5*(1+rt),0.5*(3+rt),0],[0.5*(3+rt),0.5*(3+rt),0],
+                    [0.5*(0.5+0.5*rt),0.5*(4.5+1.5*rt),0],[0.5*(3.5+1.5*rt),0.5*(4.5+1.5*rt),0],
+                    [0.5*(2+rt),0.5*(5+2*rt),0],
+                    [0.5*(5+2*rt),0.5*(2+rt),0],[0.5*(5+2*rt),0.5*(4+rt),0],
+                    ])*a
+    
+    def generate_cairo_part(self,a):#let the edge lengths of pentagons are 0.5*[1+sqrt(3)] or 1
+        rt = math.sqrt(3)
+        #uc = hoomd.lattice.unitcell
+        #N=8,
+        self.a1 = np.array([0.5*(6+2*rt),0,0])*a
+        self.a2 = np.array([0,0.5*(6+2*rt),0])*a
+        self.a3 = np.array([0,0,0])
+        #the shape is a bow upward /--\_ where edge of square & triangle is 2*sqrt(3)
+        self.position=np.array([
+                    [0,0,0], [0.5*(4+2*rt), 0, 0],
+                    [0.5*(2+rt),0.5,0],
+                    [0.5*(1+rt),0.5*(3+rt),0],[0.5*(3+rt),0.5*(3+rt),0],
+                    [0.5*(2+rt),0.5*(5+2*rt),0],
+                    [0.5*(5+2*rt),0.5*(2+rt),0],[0.5*(5+2*rt),0.5*(4+rt),0],
+                    ])*a
+
     def generate_type_n(self,type_n,a=1):
         if (type_n) == 1:
             self.generate_type1(a)
@@ -3209,6 +3240,8 @@ class archimedean_tilings:
             self.generate_type10(a)
         elif (type_n) == 11:
             self.generate_type11(a)
+        elif (type_n) == 12:
+            self.generate_cairo(a)
         elif (type_n) == 62:
             self.generate_type6_superlattice(a)
         elif (type_n) == 72:
@@ -3237,6 +3270,8 @@ class archimedean_tilings:
             self.generate_type10_part(a)
         elif (type_n) == 11:
             self.generate_type11_part(a)
+        elif (type_n) == 12:
+            self.generate_cairo_part(a)
         elif (type_n) == 62:
             self.generate_type6_part_superlattice(a)
         elif (type_n) == 72:
@@ -3310,6 +3345,60 @@ class archimedean_tilings:
         pt = test.voronoi.vertices
         return pt
     
+    def get_type_n_lcr0(self):
+        R"""
+        introduction:
+            lcr0 is a parameter when a_hex * lcr0 = a_type_n, 
+            the particle density of n_hex and n_type_n are equal. 
+        return:
+            record_lcr0:(11,)[lcr0_for_type1,2,3...,11]
+        """
+        record_lcr0 = np.zeros((11,))
+        for i in range(11):
+            self.generate_type_n(i+1)
+            cross_lattice = np.cross(self.a1,self.a2)
+            area_per_particle = cross_lattice[2]/len(self.position)
+            area_hex = np.sqrt(3)/2.0
+            lcr0 = np.sqrt(area_hex/area_per_particle)
+            record_lcr0[i] = lcr0
+            #print("type"+str(i+1)+": "+str(np.round(lcr0,4) ))
+            #del at
+        return record_lcr0
+    
+    def get_coordination_number_k_for_type_n(self,type_n):
+        R"""
+        inform the users using which order parameter 
+        to evaluate the ratio of type_n transformation 
+        """
+        if type_n==1:
+            coord_num_k=6
+        elif type_n==2:
+            coord_num_k=4
+        elif type_n==3:
+            coord_num_k=3
+        elif type_n==4:
+            coord_num_k=3
+        elif type_n==5:
+            coord_num_k=3
+        elif type_n==6:
+            coord_num_k=3
+        elif type_n==7:
+            coord_num_k=4
+        elif type_n==8:
+            coord_num_k=4
+        elif type_n==9:
+            coord_num_k=5
+        elif type_n==10:
+            coord_num_k=5
+        elif type_n==11:
+            coord_num_k=5
+        elif type_n==62:
+            coord_num_k=3
+        elif type_n==72:
+            coord_num_k=4
+
+        return coord_num_k
+    
 class archimedean_tilings_polygon_dye:
     def __init__(self):
         R"""
@@ -3330,6 +3419,7 @@ class archimedean_tilings_polygon_dye:
         #colorblind ibm-format
         self.color3 = np.array([255,176,0])/255.0
         self.color4 = np.array([254,97,0])/255.0
+        self.color5 = np.array([255,219,255])/255.0
         self.color6 = np.array([220,38,127])/255.0
         self.color8 = np.array([120,94,240])/255.0
         self.color12 = np.array([100,143,255])/255.0
@@ -3347,7 +3437,7 @@ class archimedean_tilings_polygon_dye:
         self.color8 = 'royalblue'
         self.color12 = 'mediumpurple'"""
     
-    def workflow_type_n(self,type_n,xylim=5,n_plus=3):
+    def workflow_type_n_part_points_type_n_polygon(self,type_n,xylim=5,n_plus=3):
         R"""
         import workflow_analysis as wa
         atpd = wa.archimedean_tilings_polygon_dye()
@@ -3383,6 +3473,7 @@ class archimedean_tilings_polygon_dye:
         count_polygon_relative = p2d.get_conditional_bonds_and_simplices_bond_length()
         fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color3,polygon_n=3)
         fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color4,polygon_n=4)
+        fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color5,polygon_n=5)
         fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color6,polygon_n=6)
         fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color8,polygon_n=8)
         fig,ax = p2d.draw_polygon_patch_oop(fig,ax,self.color12,polygon_n=12)
@@ -3701,7 +3792,43 @@ class show_cn_k:
         #plt.show()
         plt.savefig(png_filename)
         record_filename = prefix +'T_VS_CN_k_cut'+'index'+str_index+'.txt'
-        np.savetxt(record_filename,record_cn)
+        #np.savetxt(record_filename,record_cn)
+        plt.close()
+    
+    def show_cn_k_logt(self,frame_cut,record_cn,prefix,str_index):
+        plt.figure()
+        if frame_cut == 0:#frame_cut is set to abstract a part of the process to watch in detail
+            #plt.semilogx(record_cn[:,0],record_cn[:,1],label='CN_0')
+            #plt.semilogx(record_cn[:,0],record_cn[:,2],label='CN_1')
+            #plt.semilogx(record_cn[:,0],record_cn[:,3],label='CN_2')
+            plt.semilogx(record_cn[:,0],record_cn[:,4],label='CN_3')
+            plt.semilogx(record_cn[:,0],record_cn[:,5],label='CN_4')
+            plt.semilogx(record_cn[:,0],record_cn[:,6],label='CN_5')
+            plt.semilogx(record_cn[:,0],record_cn[:,7],label='CN_6')
+            plt.semilogx(record_cn[:,0],record_cn[:,8],label='CN_7')
+            #plt.semilogx(record_cn[:,0],record_cn[:,9],label='CN_8')
+            #plt.semilogx(record_cn[:,0],record_cn[:,-1],label='CN_9')
+            png_filename = prefix +'logT_VS_CN_k'+'index'+str_index+'egcut'+'.png'
+        else:
+            #plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,1],label='CN_0')
+            #plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,2],label='CN_1')
+            #plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,3],label='CN_2')
+            plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,4],label='CN_3')
+            plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,5],label='CN_4')
+            plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,6],label='CN_5')
+            plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,7],label='CN_6')
+            plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,8],label='CN_7')
+            #plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,9],label='CN_8')
+            #plt.semilogx(record_cn[0:frame_cut,0],record_cn[0:frame_cut,-1],label='CN_9')
+            png_filename = prefix +'T_VS_CN_k_tcut'+'index'+str_index+'egcut'+'.png'
+        plt.legend()
+        plt.title('CN_k '+'index:'+str_index)
+        plt.xlabel('time(steps)')
+        plt.ylabel('CN_k(1)')
+        #plt.show()
+        plt.savefig(png_filename)
+        record_filename = prefix +'logT_VS_CN_k_cut'+'index'+str_index+'.txt'
+        #np.savetxt(record_filename,record_cn)
         plt.close()
 
     def reorganize_cn_k_txt_and_show(self):
@@ -3808,7 +3935,6 @@ class compare_diagram:
             lcr=table_return[i][2]
             prefix_simu = '/home/remote/Downloads/'
             self.show_bond_plot(xy=txyz[-1,:,0:2],folder_name=prefix_simu,str_index=str_simu_index,lcr=lcr)
-
 
     def select_a_list_of_simulations_from_mysql(self):
         R"""
@@ -4609,7 +4735,7 @@ class workflow_temp:
         pass
 
     def extend_traps_to_9boxes(self):
-        import points_analysis_2D as pa
+        import points_analysis_2D_freud as pa
         
         import proceed_file as pf
         import workflow_analysis as wa

@@ -155,6 +155,10 @@ class particle_track:
                 size means the radius of gyration of its Gaussian-like profile,
                 ecc is its eccentricity (0 is circular),
                 and raw_mass is the total integrated brightness in raw_image.
+
+            f0: the RGB image
+            f1: the gray image
+
             
             axis_limit should be a list of 4 ints [xmin,xmax,ymin,ymax] 
                 to limit the region(pixel as unit)of image to recognize particles.
@@ -221,6 +225,9 @@ class particle_track:
             self.image = f0[lm[0]:lm[1],lm[2]:lm[3],:]
         
         return f1
+    
+    def save_feature(self):
+        pd.DataFrame.to_csv(self.f,'feature_single_frame.csv')
 
     def folder_frames_particle_tracking(self,dir_path,Diameter=19, minmass=1000,feature_filename='feature.csv'):
         R"""

@@ -88,7 +88,7 @@ class proceed_gsd_file:
             self.simu_index = int(simu_index)
             if not seed is None:
                 simu_index = str(int(simu_index))+'_'+str(int(seed))
-            prefix_gsd = '/home/'+account+'/hoomd-examples_0/trajectory_auto'
+            prefix_gsd = '/home/'+account+'/hoomd-examples_1'#'/record_cairo/trajectory_auto'#
             #'/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/trajectory_auto'
             #'/home/'+account+'/hoomd-examples_0/trajectory_auto'
             postfix_gsd = '.gsd'
@@ -103,13 +103,13 @@ class proceed_gsd_file:
         self.num_of_frames=len(self.trajectory)
         
     def read_a_frame(self,frame_num,dimension=2):
-        snap=self.trajectory.read_frame(frame_num)#take a snapshot of the N-th frame
+        snap=self.trajectory._read_frame(frame_num)#take a snapshot of the N-th frame
         positions=snap.particles.position[:,0:dimension]#just record [x,y] ignoring z
         #self.N = self.snap.particles.N
         return positions
     
     def read_the_typeid(self,dimension=2):
-        snap=self.trajectory.read_frame(0)#take a snapshot of the N-th frame
+        snap=self.trajectory._read_frame(0)#take a snapshot of the N-th frame
         positions=snap.particles.typeid[:,0:dimension]#just record [x,y] ignoring z
         #self.N = self.snap.particles.N
         return positions
@@ -139,11 +139,11 @@ class proceed_gsd_file:
                 pgf.get_trajectory_data(save_prefix)
         """
         frame = 0
-        snapi = self.trajectory.read_frame(frame)
+        snapi = self.trajectory._read_frame(frame)
         pos_list = np.zeros([self.num_of_frames,snapi.particles.N,3])#gsd_data.trajectory[0].particles.N,
         while frame < self.num_of_frames:
-            pos_list[frame] = self.trajectory.read_frame(frame).particles.position
-            #print(self.trajectory.read_frame(iframe).configuration.box)
+            pos_list[frame] = self.trajectory._read_frame(frame).particles.position
+            #print(self.trajectory._read_frame(iframe).configuration.box)
             frame = frame + 1
         
         self.txyz = pos_list
@@ -200,6 +200,61 @@ class proceed_gsd_file:
                 file_txyz_npy = save_prefix+'txyz_stable'
                 np.save(file = file_txyz_npy,arr = self.txyz_stable)
     
+    def get_trajectory_data_with_traps(self,save_prefix = None):#unchecked,,simu_index=None,seed=None
+        R"""
+        introduction:
+            transform gsd file into an array [Nframes,Nparticles,3],
+            recording the trajectory of particles.
+        input:
+            gsd_file
+        return:
+            txyz [Nframes,Nparticles,3] or
+            (npy file)[Nframes,Nparticles,3]
+        example:
+            import numpy as np
+            import opertateOnMysql as osql
+            tb_name = 'pin_hex_to_cairo_egct'
+            #SimuIndex | HarmonicK | LinearCompressionRatio | CoordinationNum3Rate | CoordinationNum4Rate | CoordinationNum6Rate | PCairo     | RandomSeed
+            cont = ' SimuIndex '
+            list_index = osql.getDataFromMysql(table_name=tb_name,select_content=cont)
+            list_index = np.array(list_index)
+            import proceed_file as pf
+            save_prefix = '/home/tplab/Downloads/'
+            for index1 in list_index:
+                pgf = pf.proceed_gsd_file(simu_index=index1[0])#,seed=9
+                pgf.get_trajectory_data(save_prefix)
+        """
+        frame = 0
+        snapi = self.trajectory._read_frame(frame)
+        last_frame = snapi
+        dimensions = 2
+        xy_particles_traps = last_frame.particles.position[:,:dimensions]
+        ids = np.array(last_frame.particles.typeid)
+        list_p = ids == 0
+        list_t = ids == 1
+        n_particles = np.sum(np.array(list_p,dtype=int))
+        #n_traps = np.sum(np.array(list_t,dtype=int))
+        #save traps positions as txt
+        traps = xy_particles_traps[list_t]
+        file_traps_txt = save_prefix+'traps.txt'
+        np.savetxt(file_traps_txt,traps)
+        del traps,file_traps_txt
+        #save box size as txt
+        file_box_txt = save_prefix+'box.txt'
+        np.savetxt(file_box_txt,self.box[:dimensions])
+        del file_box_txt
+        #save particles positions as npy
+        pos_list = np.zeros([self.num_of_frames,n_particles,dimensions])#gsd_data.trajectory[0].particles.N,
+        for frame in range(self.num_of_frames):
+            pos_list[frame] = self.trajectory._read_frame(frame).particles.position[list_p,:dimensions]
+            #print(self.trajectory._read_frame(iframe).configuration.box)
+        self.txyz = pos_list
+        file_txyz_npy = save_prefix+'txyz'
+        np.save(file_txyz_npy,self.txyz)
+    
+    def get_trajectory_stable_data_with_traps(self,save_prefix = None):
+        self.get_trajectory_stable_data(save_prefix)
+    
     def get_trajectory_data_large(self,save_prefix = None):
         R"""
         introduction:
@@ -212,12 +267,12 @@ class proceed_gsd_file:
             (npy file)[Nframes,Nparticles,3]
         """
         frame = 0
-        snapi = self.trajectory.read_frame(frame)
+        snapi = self.trajectory._read_frame(frame)
         pos_list = np.zeros([int(self.num_of_frames/10+1),snapi.particles.N,3])#gsd_data.trajectory[0].particles.N,
         i=0
         while frame < self.num_of_frames:
-            pos_list[i] = self.trajectory.read_frame(frame).particles.position
-            #print(self.trajectory.read_frame(iframe).configuration.box)
+            pos_list[i] = self.trajectory._read_frame(frame).particles.position
+            #print(self.trajectory._read_frame(iframe).configuration.box)
             frame = frame + 10
             i = i+1
         
@@ -244,7 +299,7 @@ class proceed_gsd_file:
         Situation:
             checked right.
         """
-        snap=self.trajectory.read_frame(frame_num)#take a snapshot of the N-th frame
+        snap=self.trajectory._read_frame(frame_num)#take a snapshot of the N-th frame
         positions=snap.particles.position[:,0:dimension]#just record [x,y] ignoring z
         box = snap.configuration.box
         extended_positions = self.get_extended_positions_from_points(box,positions,dimension=2)

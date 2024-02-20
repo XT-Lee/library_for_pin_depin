@@ -2,7 +2,7 @@ import time
 import os
 import numpy as np
 import particle_tracking as pt
-import points_analysis_2D as pa
+import points_analysis_2D_freud as pa
 
 R"""
 parameters:

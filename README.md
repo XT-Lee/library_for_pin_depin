@@ -31,6 +31,38 @@
 - particle_decorate
 
 ## log:
+- 20240220 edit get_transformation_velocity_scan_csv in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file_dynamic
+			add stable in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_trajectory
+			add get_coordination_number_conditional(tune_dis) in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_trajectory.get_cn_k_from_a_gsd_frame
+- 20240219 edit get_saturate_time_of_tanh_like_data in points_analysis_2D.dynamic_points_analysis_2d.
+			edit get_saturate_time_of_tanh_like_data in points_analysis_2D.dynamic_points_analysis_2d
+			add data_analysis_cycle.save_from_txyz_to_cn3
+			edit count_coordination structure in points_analysis_2D.static_points_analysis_2d.get_coordination_number_conditional
+- 20240218 add get_saturate_time_of_tanh_like_data in points_analysis_2D.dynamic_points_analysis_2d.
+- 20240217 rename points_analysis_2D as points_analysis_2D_freud.
+			move points_analysis_2D in lxt_code_py16_node to here.
+			add ovariance_matrix_module in points_analysis_2D
+- 20240126 edit init,get_cn_k_from_a_gsd_frame in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_gsd_frame.
+			add get_cnks_vs_t_from_csv in symmetry_transformation_v4_3.analysis_controller.analyze_a_series_of_gsd_file_dynamic
+			add get_cnks in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_trajectory
+			add show_cn_k_logt in workflow_analysis.show_cn_k.
+- 20240125 add get_radial_distribution_function in points_analysis_2D.static_points_analysis_2d from lxt_code_py16_node
+			add get_trajectory_data_with_traps,get_trajectory_stable_data_with_traps in proceed_file.proceed_gsd_file
+			to record triagnles, edit get_conditional_bonds_and_simplices_vertex_length in points_analysis_2D.static_points_analysis_2d
+- 20240123 in workflow_analysis.archimedean_tilings.
+			add generate_cairo_part,generate_cairo
+			edit generate_type_n,generate_type_n_part
+			edit _init_ in workflow_analysis.archimedean_tilings_polygon_dye.
+- 20240122 add merge_cnk_by_seed,merge_cnk_std_by_seed in getDataAndDiagramCsv
+- 20240118 add check_PRE15 in function_plot.example_plot.functions_plot_module.
+- 20240117 in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file.
+			edit get_cnks_from_csv_files_type_n_part 
+			upgrade gsd, hence .Snapshot->.Frame, .read_frame->._read_frame
+			add generate_dipole,check_pre15 in function_plot.example_plot.functions_plot_module
+- 20240116 in workflow_analysis.archimedean_tilings.
+			add get_type_n_lcr0, get_coordination_number_k_for_type_n
+			in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file.
+			edit get_cnks_from_csv_files_type_n_part 
 - 20240115 edit workflow_analysis.show_bond_image.read_image,draw_bond_exp_hex
 			add points_analysis_2D.bond_plot_module.plot_scale_bar
 - 20240111 add operate_simulation_langevin_wca_yukawa in simulation_core_p.simulation_core_traps
