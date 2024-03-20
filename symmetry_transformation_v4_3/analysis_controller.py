@@ -1,4 +1,4 @@
-import points_analysis_2D_freud as pa
+import points_analysis_2D as pa
 import gsd.hoomd
 import numpy as np
 
@@ -154,7 +154,8 @@ class get_data_from_a_gsd_frame:
         fig, ax = plt.subplots()
         p2d = pa.static_points_analysis_2d(self.points, hide_figure=False)
 
-        p2d.get_first_minima_bond_length_distribution(png_filename='bond_hist.png')
+        p2d.get_first_minima_bond_length_distribution(
+            lattice_constant=tune_dis, png_filename='bond_hist.png')
         # draw bonds selected
         bpm = pa.bond_plot_module(fig, ax)
         bpm.restrict_axis_property_relative('(sigma)')
@@ -174,23 +175,24 @@ class get_data_from_a_gsd_frame:
         ymin = min(traps[:,1]) + tune_dis
         p2d.cut_edge_of_positions_by_xylimit(xmin,xmax,ymin,ymax)"""
 
-    def get_bonds_png_from_a_gsd_frame(self, png_filename):
+    def get_bonds_png_from_a_gsd_frame(self, png_filename, tune_dis=2.4):
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots()
-        p2d = pa.static_points_analysis_2d(self.points, hide_figure=False)  # dis_edge_cut=
+        p2d = pa.static_points_analysis_2d(self.points)  # dis_edge_cut=,, hide_figure=False
 
-        p2d.get_first_minima_bond_length_distribution(png_filename='bond_hist.png')
+        p2d.get_first_minima_bond_length_distribution(
+            lattice_constant=tune_dis, png_filename='bond_hist.png')
         # draw bonds selected
         bpm = pa.bond_plot_module(fig, ax)
-        bpm.restrict_axis_property_relative('(sigma)')  # '(sigma)',hide_axis=True
+        bpm.restrict_axis_property_relative(hide_axis=True)  # '(sigma)'
         list_bond_index = bpm.get_bonds_with_conditional_bond_length(
             p2d.bond_length, [1.2, p2d.bond_first_minima_left])
 
         # p2d.bond_length[:,:2].astype(int)
-        bpm.plot_points_with_given_bonds(
+        bpm.draw_points_with_given_bonds(
             self.points, list_bond_index, bond_color='k', particle_color='k')
-        # bpm.plot_traps(self.traps)
-        # bpm.restrict_axis_limitation([-10,10],[-10,10])#[-20,0],[-5,15]
+        bpm.plot_traps(self.traps)
+        bpm.restrict_axis_limitation([-10, 10], [-10, 10])  # [-20,0],[-5,15]
         bpm.save_figure(png_filename)
         del bpm
 
@@ -220,7 +222,7 @@ class get_data_from_a_trajectory:
     def __init__(self, simu_index, seed, gsd_filename=None, stable=False):  # txy=None,traps=None
         self.__set_file_parameters(simu_index, seed)
         if not gsd_filename is None:
-            self.from_gsd_to_data(gsd_filename)
+            self.from_gsd_to_data(gsd_filename, stable)
         self.load_data(stable)
 
     def __set_file_parameters(self, simu_index, seed, work_space=None):
@@ -236,14 +238,15 @@ class get_data_from_a_trajectory:
         # self.input_file_gsd = self.prefix_read+'particles.gsd'
         # self.output_file_gsd = self.prefix_write+'trajectory_auto'+str(int(self.simu_index))+'_'+str(int(self.seed))+'.gsd'
 
-    def from_gsd_to_data(self, filename_gsd_seed):
+    def from_gsd_to_data(self, filename_gsd_seed, stable):
         import proceed_file as pf
         pfile = pf.proceed_file_shell()
         pfile.create_folder(self.work_space, self.folder_for_a_trajectory)
         # save data
         gsd_data = pf.proceed_gsd_file(filename_gsd_seed=filename_gsd_seed)
         gsd_data.get_trajectory_data_with_traps(self.directory_to_trajectory_data)
-        gsd_data.get_trajectory_stable_data_with_traps(self.directory_to_trajectory_data)
+        if stable:
+            gsd_data.get_trajectory_stable_data_with_traps(self.directory_to_trajectory_data)
 
     def load_data(self, stable=False):
         # load data
@@ -305,13 +308,25 @@ class get_data_from_a_trajectory:
                 # lim = [[-a,a],[-a,a]]#-4,12,-5,16
                 # p2d.draw_bonds_simplex_conditional_oop(png_filename=png_filename,x_unit='($\sigma$)',axis_limit=lim,fig=fig,ax=ax)
 
-    def get_cnks(self, dis_cut=0, csv_filename='cnks.csv', last_frame=False):  # , return_value=False
+    def get_cnks(self, dis_cut=0, csv_filename='cnks.csv', last_frame=False, cn_final_check=6, bench_mark=0.5):  # , return_value=False
         txyz = self.txyz
         nframes = np.shape(txyz)[0]
         n_params = 1+9
         record_cnks = np.zeros((nframes, n_params))  # cn0~8, 9 parameters + 1 time
         record_cnks[:, 0] = np.linspace(1, nframes, nframes)  # time steps
+
+        frame = nframes-1
+        gf = get_data_from_a_gsd_frame(points=self.txyz[frame], traps=self.traps)
+        ccn = gf.get_cn_k_from_a_gsd_frame(dis_cut, k=None)
+        record_cnks[frame, 1:] = np.transpose(ccn[1:n_params])
+        if ccn[cn_final_check] > bench_mark:
+            go_on = True
+        else:
+            go_on = False
+
         for frame in range(nframes):
+            if not go_on:
+                break
             if last_frame:
                 frame = nframes-1
             # if frame>141:

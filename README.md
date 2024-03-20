@@ -31,6 +31,26 @@
 - particle_decorate
 
 ## log:
+- 20240318 edit get_trap_positions in particle_tracking.save_points_from_exp
+			add control_table_image_proceed
+			edit restrict_axis_property_relative,plot_scale_bar in points_analysis_2D_freud.bond_plot_module_for_image
+- 20240317 rename control_table_neighbor_change_evolution as control_table_string_like_motion
+			add generate_type9_part_superlattice,generate_type9_superlattice in workflow_analysis.archimedean_tilings
+- 20240308 add restrict in points_analysis_2D.dynamic_points_analysis_2d.plot_neighbor_change_evolution
+			add show_pin_interstitial_order_parameter_v43 in  workflow_analysis
+			add plot_neighbor_change_evolution_finetune in points_analysis_2D.dynamic_points_analysis_2d
+			add coarse_grainize_and_hist_average_data_log_with_dynamic_navg_odd in data_decorate.data_decorator.
+- 20240306 edit plot_neighbor_change_evolution in points_analysis_2D.dynamic_points_analysis_2d
+- 20240305 edit get_bonds_from_simu_indices_list_type_n in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file
+			add control_table_final_frame_bond
+			add tune_dis in symmetry_transformation_v4_3.analysis_controller.get_bonds_png_from_a_gsd_frame
+- 20240304 edit the order of fuctions in getDataAndDiagramCsv
+			add get_diagram_binary_from_csv_type_n in getDataAndDiagramCsv
+			add control_table_diagram
+			edit *0.86466 from *0.99613 in get_cnks_from_csv_files_type_n_part.analyze_a_series_of_gsd_file.
+			edit in list_code_analysis.analyze_a_series_of_gsd_file_dynamic.get_transformation_velocity_scan_csv_read
+- 20240222 edit the position of get_cnks_from_csv_files_type_n_part in list_code_analysis.analyze_a_series_of_gsd_file
+			edit get_transformation_velocity_scan_csv in list_code_analysis.analyze_a_series_of_gsd_file_dynamic
 - 20240220 edit get_transformation_velocity_scan_csv in symmetry_transformation_v4_3.list_code_analysis.analyze_a_series_of_gsd_file_dynamic
 			add stable in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_trajectory
 			add get_coordination_number_conditional(tune_dis) in symmetry_transformation_v4_3.analysis_controller.get_data_from_a_trajectory.get_cn_k_from_a_gsd_frame

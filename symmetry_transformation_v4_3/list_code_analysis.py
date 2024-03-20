@@ -115,6 +115,66 @@ class analyze_a_series_of_gsd_file:
     def __init__(self):
         pass
 
+    def get_cnks_from_csv_files_type_n_part(self, output_file_csv, seed_limit=9, add_type_3=False):
+        R"""
+        parameter:
+            cn_k:(int) the k to calculate cn_k
+        example:
+            write_prefix = "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/"
+            output_file_csvs = ["depin_type_n_from_type_n_part_klt_2m_gauss_6053.csv",
+            "depin_type_n_from_type_n_part_klt_2m_gauss_6293.csv",
+            "depin_type_n_from_type_n_part_klt_2m_gauss_7163.csv"]
+            import symmetry_transformation_v4_3.list_code_analysis as lca
+            asg = lca.analyze_a_series_of_gsd_file()
+            for output_file_csv in output_file_csvs:
+                fn = write_prefix+output_file_csv
+                print(fn)
+                asg.get_cnks_from_csv_files_type_n_part(fn)
+        example2:
+            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv"#0-6
+            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv"#0-9
+            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv"#0-9
+            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"#0-9
+        """
+        import symmetry_transformation_v4_3.analysis_controller as ac
+        import workflow_analysis as wa
+        at = wa.archimedean_tilings()
+        gg = ac.get_gsds_from_mysql_or_csv()
+        gsds_filename = gg.get_record_from_csv(output_file_csv)
+        # list_simu = gg.record['simu_index'].values
+        list_seeds = gg.record['seed'].values
+        lcrs = gg.record['lcr'].values
+        if add_type_3:
+            gg.record['type_n'] = 3
+        type_ns = gg.record['type_n'].values
+        pdata = ac.get_a_gsd_from_setup()
+        cnks = np.zeros((len(gsds_filename),))
+        for i in range(len(gsds_filename)):
+            if list_seeds[i] <= seed_limit:
+                isExists = os.path.exists(gsds_filename[i])
+                if isExists:
+                    file_size_b = os.path.getsize(gsds_filename[i])
+                    file_size_kb = file_size_b/1024
+                    if file_size_kb > 1000:
+                        pdata.get_gsd_data_from_filename(gsds_filename[i])
+                        gdata = ac.get_data_from_a_gsd_frame(pdata.gsd_data[-1])
+                        coord_num_k = at.get_coordination_number_k_for_type_n(type_ns[i])
+                        cnk = gdata.get_cn_k_from_a_gsd_frame(tune_dis=3*lcrs[i], k=coord_num_k)
+                        cnks[i] = cnk
+                    else:
+                        cnks[i] = -1
+                else:
+                    cnks[i] = -1
+            else:
+                cnks[i] = -1
+        col_cnk = 'cn'+str(int(coord_num_k))  # the last type_n's cnk as column_name
+        gg.record[col_cnk] = cnks
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
+        import pandas as pd
+        # to strip 'unnamed:0' column which contains [1,2,3...]
+        list_col = gg.record.columns.values[1:]
+        pd.DataFrame.to_csv(gg.record[list_col], output_file_csv)
+
     def get_cn3s_from_mysql_honeycomb(self):
         R"""
             lcr0.81 honeycomb pin
@@ -231,7 +291,7 @@ class analyze_a_series_of_gsd_file:
         df = pd.DataFrame(ggfs.record, columns=['simu_index',
                           'seed', "lcr", 'trap_gauss_epsilon', 'temperature'])
         df['cn3'] = list_cn3
-        df['U_eq'] = df['trap_gauss_epsilon'].values*0.99613
+        df['U_eq'] = df['trap_gauss_epsilon'].values*0.86466  # *0.99613
         """import matplotlib.pyplot as plt
         import matplotlib
         #Backend agg is non-interactive backend. Turning interactive mode off. 'QtAgg' is interactive mode
@@ -286,66 +346,6 @@ class analyze_a_series_of_gsd_file:
             int(list_type_n))+'_part_klt_2m_gauss_'+str(int(index1))+'.csv'  # [x]
         self.get_cnks_from_csv_files_type_n_part(5, output_file_csv)
 
-    def get_cnks_from_csv_files_type_n_part(self, output_file_csv, seed_limit=9, add_type_3=False):
-        R"""
-        parameter:
-            cn_k:(int) the k to calculate cn_k
-        example:
-            write_prefix = "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/"
-            output_file_csvs = ["depin_type_n_from_type_n_part_klt_2m_gauss_6053.csv",
-            "depin_type_n_from_type_n_part_klt_2m_gauss_6293.csv",
-            "depin_type_n_from_type_n_part_klt_2m_gauss_7163.csv"]
-            import symmetry_transformation_v4_3.list_code_analysis as lca
-            asg = lca.analyze_a_series_of_gsd_file()
-            for output_file_csv in output_file_csvs:
-                fn = write_prefix+output_file_csv
-                print(fn)
-                asg.get_cnks_from_csv_files_type_n_part(fn)
-        example2:
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv"#0-6
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv"#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv"#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"#0-9
-        """
-        import symmetry_transformation_v4_3.analysis_controller as ac
-        import workflow_analysis as wa
-        at = wa.archimedean_tilings()
-        gg = ac.get_gsds_from_mysql_or_csv()
-        gsds_filename = gg.get_record_from_csv(output_file_csv)
-        # list_simu = gg.record['simu_index'].values
-        list_seeds = gg.record['seed'].values
-        lcrs = gg.record['lcr'].values
-        if add_type_3:
-            gg.record['type_n'] = 3
-        type_ns = gg.record['type_n'].values
-        pdata = ac.get_a_gsd_from_setup()
-        cnks = np.zeros((len(gsds_filename),))
-        for i in range(len(gsds_filename)):
-            if list_seeds[i] <= seed_limit:
-                isExists = os.path.exists(gsds_filename[i])
-                if isExists:
-                    file_size_b = os.path.getsize(gsds_filename[i])
-                    file_size_kb = file_size_b/1024
-                    if file_size_kb > 1000:
-                        pdata.get_gsd_data_from_filename(gsds_filename[i])
-                        gdata = ac.get_data_from_a_gsd_frame(pdata.gsd_data[-1])
-                        coord_num_k = at.get_coordination_number_k_for_type_n(type_ns[i])
-                        cnk = gdata.get_cn_k_from_a_gsd_frame(tune_dis=3*lcrs[i], k=coord_num_k)
-                        cnks[i] = cnk
-                    else:
-                        cnks[i] = -1
-                else:
-                    cnks[i] = -1
-            else:
-                cnks[i] = -1
-        col_cnk = 'cn'+str(int(coord_num_k))  # the last type_n's cnk as column_name
-        gg.record[col_cnk] = cnks
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
-        import pandas as pd
-        # to strip 'unnamed:0' column which contains [1,2,3...]
-        list_col = gg.record.columns.values[1:]
-        pd.DataFrame.to_csv(gg.record[list_col], output_file_csv)
-
     def get_cn5s_from_csv_files_type_11_part(self):
         R"""
             import symmetry_transformation_v4_3.list_code_analysis as lca
@@ -372,7 +372,7 @@ class analyze_a_series_of_gsd_file:
             else:
                 cn5s[i] = -1
         gg.record['cn5'] = cn5s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -403,7 +403,7 @@ class analyze_a_series_of_gsd_file:
             cn4s[i] = cn4
 
         gg.record['cn4'] = cn4s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -436,7 +436,7 @@ class analyze_a_series_of_gsd_file:
             else:
                 cn4s[i] = -1
         gg.record['cn4'] = cn4s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -470,7 +470,7 @@ class analyze_a_series_of_gsd_file:
             # else:
             #    cn4s[i] = -1
         gg.record['cn4'] = cn4s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -500,7 +500,7 @@ class analyze_a_series_of_gsd_file:
             else:
                 cn3s[i] = -1
         gg.record['cn3'] = cn3s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -531,7 +531,7 @@ class analyze_a_series_of_gsd_file:
             else:
                 cn3s[i] = -1
         gg.record['cn3'] = cn3s
-        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.99613
+        gg.record['U_eq'] = gg.record['trap_gauss_epsilon'].values*0.86466  # *0.99613
         import pandas as pd
         # to strip 'unnamed:0' column which contains [1,2,3...]
         list_col = gg.record.columns.values[1:]
@@ -735,18 +735,18 @@ class analyze_a_series_of_gsd_file:
         plt.legend()
         plt.show()
 
-    def get_bonds_from_simu_indices_type_n(self):
+    def get_bonds_from_simu_indices_type_n(self, index0, seed0=9):
         R"""
             lcr0.81 honeycomb pin
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
         # prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/'
-        index0 = 7223  # 6302
+        # index0 = 7223  # 6302
         for i in range(10):
             index1 = index0+i  # 658#
             # gsd_file = prefix_write + 'trajectory_auto'+str(int(index1))+'_9.gsd'
             ggsd = ac.get_a_gsd_from_setup()
-            ggsd.set_file_parameters(index1, 9)
+            ggsd.set_file_parameters(index1, seed0)
             ggsd.get_gsd_data_from_file()
             frame = ggsd.gsd_data[-1]
 
@@ -759,22 +759,48 @@ class analyze_a_series_of_gsd_file:
                     'depin_from_type_'+str(7)+'_part_special_'+str(index1)+'.png')  # 4+i
             del gf
 
-    def get_bonds_from_simu_indices_list_type_n(self):
+    def get_bonds_from_simu_indices_type_n(self, index0, seed0=9):
         R"""
-
+            lcr0.81 honeycomb pin
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        list_index = [7001, 7052, 7112, 7137, 7141]
-        for i in range(5):
-            index1 = list_index[i]
+        # prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/'
+        # index0 = 7223  # 6302
+        for i in range(10):
+            index1 = index0+i  # 658#
             # gsd_file = prefix_write + 'trajectory_auto'+str(int(index1))+'_9.gsd'
             ggsd = ac.get_a_gsd_from_setup()
-            ggsd.set_file_parameters(index1, 9)
+            ggsd.set_file_parameters(index1, seed0)
             ggsd.get_gsd_data_from_file()
             frame = ggsd.gsd_data[-1]
 
             gf = ac.get_data_from_a_gsd_frame(frame)  # error:missing last frame
-            gf.get_bonds_png_from_a_gsd_frame(str(index1)+'_9.png')
+            if i < 5:
+                gf.get_bonds_png_from_a_gsd_frame(
+                    'depin_from_type_'+str(6)+'_part_special_'+str(index1)+'.png')  # 4+i
+            else:
+                gf.get_bonds_png_from_a_gsd_frame(
+                    'depin_from_type_'+str(7)+'_part_special_'+str(index1)+'.png')  # 4+i
+            del gf
+
+    def get_bonds_from_simu_indices_list_type_n(self, list_index, list_seed=9, list_lcra=2.4):
+        R"""
+
+        """
+        import symmetry_transformation_v4_3.analysis_controller as ac
+        # list_index = [7001, 7052, 7112, 7137, 7141]
+        for i in range(len(list_index)):  # range(5):
+            index1 = list_index[i]
+            seed1 = list_seed[i]
+            lcra1 = list_lcra[i]
+            # gsd_file = prefix_write + 'trajectory_auto'+str(int(index1))+'_9.gsd'
+            ggsd = ac.get_a_gsd_from_setup()
+            ggsd.set_file_parameters(index1, seed1)
+            ggsd.get_gsd_data_from_file()
+            frame = ggsd.gsd_data[-1]
+
+            gf = ac.get_data_from_a_gsd_frame(frame)  # error:missing last frame
+            gf.get_bonds_png_from_a_gsd_frame('bond_'+str(index1)+'_'+str(seed1)+'.png', lcra1)
             del gf
 
     def get_bonds_from_simu_indices_type_n_from_csv(self):
@@ -1001,7 +1027,8 @@ class analyze_a_series_of_gsd_file_dynamic:
             ck.show_cn_k(0, record, dt.directory_to_trajectory_data, str_index)
             ck.show_cn_k_logt(0, record, dt.directory_to_trajectory_data, str_index)
 
-    def get_transformation_velocity_scan_csv(self, csv_filename=None, cnk=3):
+    def get_transformation_velocity_scan_csv_read(
+            self, csv_filename=None, cnk=3, index_uplimit=9999):
         R"""
 
         """
@@ -1009,13 +1036,15 @@ class analyze_a_series_of_gsd_file_dynamic:
         import proceed_file as pf
         import points_analysis_2D as pa
         import data_analysis_cycle as dac
+        import symmetry_transformation_v4_3.simulation_core as sc
         prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
         prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
         dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
         dir_kgp = '/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv'
-        dirs = [dir_h, dir_hp, dir_kg, dir_kgp]  # gsd_reocrd_location: example_1,0,1,1
+        # gsd_reocrd_location: example_1,1,1,1; dir_hp moved to exple_1 and remain only seed1-9
+        dirs = [dir_h, dir_hp, dir_kg, dir_kgp]
         # print(dirs)
         if csv_filename is None:
             csv_filename = prefix_read+dirs[0]
@@ -1032,19 +1061,35 @@ class analyze_a_series_of_gsd_file_dynamic:
         list_type_n = df['type_n'].values
 
         pfs = pf.proceed_file_shell()
+        # start = 150
+        # record cn vca
+        rvv = -np.ones((len(list_simu_index), 2))  # np.zeros((240, 2))
         for i in range(len(list_simu_index)):
-            if i >= 120 and i <= 149:
-                # isExist
-
+            # i >= 0 and i <= 269:  # i >= 240 and i <= 479:  # i >= 0 and i <= 239:  # i >= start and i <= start+29:
+            if i <= index_uplimit:
                 simu_index = list_simu_index[i]
                 seed = list_seed[i]
                 lcr = list_lcr[i]
-                ggsd.set_file_parameters(list_simu_index[i], list_seed[i], False)
+                # ggsd.set_file_parameters(list_simu_index[i], list_seed[i], False)
                 # create a folder to store data for a simu_index_seed
-                gdf = ac.get_data_from_a_trajectory(simu_index, seed)
                 # temp, str_simu_index = pfs.create_prefix_results(simu_index=simu_index, seed=seed)
+                # gdf = ac.get_data_from_a_trajectory(simu_index, seed)
+                # file_txy = gdf.directory_to_trajectory_data+'txyz.npy'
+                # if not os.path.exists(file_txy):
+                # else:
+                #    gdf = ac.get_data_from_a_trajectory(simu_index, seed)
+                #
                 # prefix_new = pfs.create_folder(prefix_write+'/', str_simu_index)
-                """dtt = pf.proceed_gsd_file(filename_gsd_seed=ggsd.input_file_gsd)
+                gdf = ac.get_data_from_a_trajectory(simu_index, seed)
+                """
+                prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+                output_file_gsd = prefix_write+'trajectory_auto' + \
+                    str(int(simu_index))+'_'+str(int(seed))+'.gsd'
+                # sct = sc.simulation_core_traps(simu_index, seed)
+                gsd_filename = output_file_gsd  # sct.output_file_gsd
+                gdf = ac.get_data_from_a_trajectory(simu_index, seed, gsd_filename=gsd_filename)
+
+                dtt = pf.proceed_gsd_file(filename_gsd_seed=ggsd.input_file_gsd)
                 file_txy = prefix_new+'txyz.npy'
                 if not os.path.exists(file_txy):
                     dtt.get_trajectory_data_with_traps(prefix_new)
@@ -1052,7 +1097,7 @@ class analyze_a_series_of_gsd_file_dynamic:
                 # record_filename = prefix_new + 'T_VS_CN_k_cut'+'index'+str_simu_index+'.csv'
                 record_filename = gdf.directory_to_trajectory_data+'T_VS_CN_k_cut'+'index'+gdf.str_simu_index+'.csv'
                 if not os.path.exists(record_filename):  # True:  #
-                    gdf.get_cnks(3 * lcr, record_filename)  # , True)
+                    gdf.get_cnks(3 * lcr, record_filename, cn_final_check=cnk)  # , True)
                 tcnk = pd.read_csv(record_filename)
                 tcnk = tcnk.values[:, 1:]  # the 1st column is just data index
                 pda = pa.dynamic_points_analysis_2d(gdf.txyz)
@@ -1069,14 +1114,163 @@ class analyze_a_series_of_gsd_file_dynamic:
                 """
                 # dac.save_t_cnk_png(tcnk, gdf.directory_to_trajectory_data,
                 #                   gdf.str_simu_index)
-                print(
-                    f"simu_index:{simu_index},seed:{seed},saturate_value:{tcnk[-1,cnk]}")
+                # print(f"simu_index:{simu_index},seed:{seed},saturate_value:{tcnk[-1,cnk]}")
                 # tcnk = np.load(record_filename)
                 st, avv = pda.get_saturate_time_of_tanh_like_data(tcnk[:, cnk])
-
+                rvv[i] = [st, avv]
                 print(
                     f"simu_index:{simu_index},seed:{seed},saturate_value:{tcnk[-1, cnk]},saturate_time:{st},averaged_velocity:{avv}")
                 print(i+1, '/', len(list_simu_index))
+        df['saturate_value'] = rvv[:, 0]
+        df['averaged_velocity'] = rvv[:, 1]
+        df_sub = df.iloc[:index_uplimit]  # df[df['seed'] == 0]
+        df_sub2 = df_sub[['rho_trap_relative', 'U_eq', 'saturate_value', 'averaged_velocity']]
+        df_sub2.to_csv(gdf.work_space+'trans_velocity'+'_index_'+str(list_simu_index[0])+'.csv')
+        """
+        df_sub.sort_index(ascending=True, inplace=True)
+        dfr = pd.DataFrame(rvv, columns=['saturate_value', 'averaged_velocity'])
+        dfr.to_csv(gdf.work_space+'trans_velocity'+'_index_'+str(list_simu_index[0])+'.csv')
+        """
+
+    def get_transformation_velocity_scan_csv(self, csv_filename=None, cnk=3, index_uplimit=9999):
+        R"""
+
+        """
+        # series setup
+        import proceed_file as pf
+        import points_analysis_2D as pa
+        import data_analysis_cycle as dac
+        import symmetry_transformation_v4_3.simulation_core as sc
+        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
+        prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
+        dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
+        dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
+        dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
+        dir_kgp = '/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv'
+        # gsd_reocrd_location: example_1,1,1,1; dir_hp moved to exple_1 and remain only seed1-9
+        dirs = [dir_h, dir_hp, dir_kg, dir_kgp]
+        # print(dirs)
+        if csv_filename is None:
+            csv_filename = prefix_read+dirs[0]
+        df = pd.read_csv(csv_filename)
+        ggsd = ac.get_a_gsd_from_setup()
+
+        list_simu_index = df['simu_index'].values
+        list_seed = df['seed'].values
+        list_lcr = df['lcr'].values
+
+        # start = 150
+        # record cn vca
+        rvv = -np.ones((len(list_simu_index), 2))  # np.zeros((240, 2))
+        # (6392, 6602, 8, dtype=int)  # temp
+        target_simu_index = np.linspace(532, 772, 9, dtype=int)
+        for i in range(len(list_simu_index)):
+            # i >= 0 and i <= 269:  # i >= 240 and i <= 479:  # i >= 0 and i <= 239:  # i >= start and i <= start+29:
+            if i >= 0 and i <= index_uplimit:
+                simu_index = list_simu_index[i]
+                if simu_index in target_simu_index:  # temp
+                    seed = list_seed[i]
+                    lcr = list_lcr[i]
+
+                    prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+                    output_file_gsd = prefix_write+'trajectory_auto' + \
+                        str(int(simu_index))+'_'+str(int(seed))+'.gsd'
+
+                    gsd_filename = output_file_gsd  # sct.output_file_gsd
+                    gdf = ac.get_data_from_a_trajectory(
+                        simu_index, seed, gsd_filename=gsd_filename, stable=True)
+                    """
+                    record_filename = gdf.directory_to_trajectory_data+'T_VS_CN_k_cut'+'index'+gdf.str_simu_index+'.csv'
+                    if not os.path.exists(record_filename):  # True:  #
+                        gdf.get_cnks(3 * lcr, record_filename, cn_final_check=cnk,
+                                     bench_mark=0.1)  # , True)
+                    tcnk = pd.read_csv(record_filename)
+                    tcnk = tcnk.values[:, 1:]  # the 1st column is just data index
+                    pda = pa.dynamic_points_analysis_2d(gdf.txyz)
+
+                    st, avv = pda.get_saturate_time_of_tanh_like_data(tcnk[:, cnk])
+                    rvv[i] = [st, avv]
+                    print(
+                        f"simu_index:{simu_index},seed:{seed},saturate_value:{tcnk[-1, cnk]},saturate_time:{st},averaged_velocity:{avv}")
+                    """
+                    print(i+1, '/', len(list_simu_index))
+        df['saturate_value'] = rvv[:, 0]
+        df['averaged_velocity'] = rvv[:, 1]
+        df_sub = df[df['seed'] == 0]
+        df_sub2 = df_sub[['rho_trap_relative', 'U_eq', 'saturate_value', 'averaged_velocity']]
+        df_sub2.to_csv(gdf.work_space+'trans_velocity'+'_index_'+str(list_simu_index[0])+'.csv')
+        """
+        df_sub.sort_index(ascending=True, inplace=True)
+        dfr = pd.DataFrame(rvv, columns=['saturate_value', 'averaged_velocity'])
+        dfr.to_csv(gdf.work_space+'trans_velocity'+'_index_'+str(list_simu_index[0])+'.csv')
+        """
+
+    def get_transformation_ratio_vs_t_scan_csv_read(
+            self, csv_filename=None, cnk=3, index_uplimit=9999):
+        R"""
+
+        """
+        # series setup
+        import proceed_file as pf
+        import points_analysis_2D as pa
+        import data_analysis_cycle as dac
+        import symmetry_transformation_v4_3.simulation_core as sc
+        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
+        prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
+        dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
+        dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
+        dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
+        dir_kgp = '/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv'
+        # gsd_reocrd_location: example_1,1,1,1; dir_hp moved to exple_1 and remain only seed1-9
+        dirs = [dir_h, dir_hp, dir_kg, dir_kgp]
+        # print(dirs)
+        if csv_filename is None:
+            csv_filename = prefix_read+dirs[0]
+        df = pd.read_csv(csv_filename)
+        ggsd = ac.get_a_gsd_from_setup()
+
+        n_size = [16, 8]
+        a_particle = 3
+        list_simu_index = df['simu_index'].values
+        list_seed = df['seed'].values
+        list_lcr = df['lcr'].values
+        list_trap_gauss_epsilon = df['trap_gauss_epsilon'].values
+        list_temperature = df['temperature'].values
+        list_type_n = df['type_n'].values
+
+        pfs = pf.proceed_file_shell()
+        # start = 150
+        # record cn vca
+        import data_decorate as dd
+        ddr = dd.data_decorator()
+        rvv = -np.ones((len(list_simu_index), 2))  # np.zeros((240, 2))
+        target_simu_index = np.linspace(6392, 6602, 8, dtype=int)  # temp
+        for i in range(len(list_simu_index)):
+            # i >= 0 and i <= 269:  # i >= 240 and i <= 479:  # i >= 0 and i <= 239:  # i >= start and i <= start+29:
+            if i <= index_uplimit:
+                simu_index = list_simu_index[i]
+                if simu_index in target_simu_index:  # temp
+                    seed = list_seed[i]
+                    lcr = list_lcr[i]
+
+                    gdf = ac.get_data_from_a_trajectory(simu_index, seed)
+
+                    record_filename = gdf.directory_to_trajectory_data+'T_VS_CN_k_cut'+'index'+gdf.str_simu_index+'.csv'
+                    if True:  # not os.path.exists(record_filename):  #
+                        gdf.get_cnks(3 * lcr, record_filename, cn_final_check=cnk,
+                                     bench_mark=0.1)  # , True)
+                    tcnk = pd.read_csv(record_filename)
+                    tcnk = tcnk.values[:, 1:]  # the 1st column is just data index
+                    pda = pa.dynamic_points_analysis_2d(gdf.txyz)
+
+                    list_index, data_decorated = ddr.coarse_grainize_and_average_data_log(
+                        tcnk[:, cnk], coarse_grain_to_n_points=10, navg_odd=5)
+                    df_new = pd.DataFrame({'frame': list_index, 'cnk': data_decorated})
+                    df_new.to_csv(
+                        gdf.work_space+'trans_cnk_vs_t'+'_index_'+str(list_simu_index[0])+'.csv')
+                    print(
+                        f"simu_index:{simu_index},seed:{seed},saturate_value:{tcnk[-1, cnk]}")
+                    print(i+1, '/', len(list_simu_index))
 
 
 class analyze_a_csv_file:

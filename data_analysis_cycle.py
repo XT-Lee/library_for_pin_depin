@@ -1274,7 +1274,35 @@ class data_analysis_workflow:
             dpa.draw_bonds.plot_traps(trap_filename,LinearCompressionRatio)
             """
 
-    def get_defect_motion(self, directory, data_name=None, trap_filename=None, trap_lcr=None):
+    def get_defect_motion(
+            self, directory, frame_init, frame_final, data_name=None, trap_filename=None,
+            trap_lcr=None):
+        file_txyz_stable = directory + 'txyz_stable.npy'
+        txyz_stable = np.load(file_txyz_stable)
+        dpa = pa.dynamic_points_analysis_2d(txyz_stable, mode='simu')
+
+        file_list_sum_id_nb_stable = directory + 'list_sum_id_nb_stable.csv'
+        import pandas as pd
+        list_sum_id_nb_stable = pd.read_csv(file_list_sum_id_nb_stable)
+        finetune = True
+        if finetune:
+            ids = dpa.plot_neighbor_change_evolution_finetune(
+                frame_init, frame_final, directory, data_name=data_name,
+                nb_change=list_sum_id_nb_stable, arrow='annotate', bond_cut_off=6,
+                trap_filename=trap_filename, trap_lcr=trap_lcr)  # '4302_9'
+            dpa.plot_neighbor_change_evolution_finetune(
+                frame_final, frame_final, directory, data_name=data_name, ids=ids, bond_cut_off=6,
+                trap_filename=trap_filename, trap_lcr=trap_lcr)
+        else:
+            ids = dpa.plot_neighbor_change_evolution(
+                frame_init, frame_final, directory, data_name=data_name,
+                nb_change=list_sum_id_nb_stable, arrow='annotate', bond_cut_off=6,
+                trap_filename=trap_filename, trap_lcr=trap_lcr)  # '4302_9'
+            dpa.plot_neighbor_change_evolution(
+                frame_final, frame_final, directory, data_name=data_name, ids=ids, bond_cut_off=6,
+                trap_filename=trap_filename, trap_lcr=trap_lcr)
+
+    def get_defect_motion_x(self, directory, data_name=None, trap_filename=None, trap_lcr=None):
         file_txyz_stable = directory + 'txyz_stable.npy'
         txyz_stable = np.load(file_txyz_stable)
         dpa = pa.dynamic_points_analysis_2d(txyz_stable, mode='simu')

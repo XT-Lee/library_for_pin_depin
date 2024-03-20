@@ -2081,10 +2081,11 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
             if final_cut or init_cut:
                 break
 
-    def plot_neighbor_change_evolution(self, frame_init, frame_final, prefix='', nb_change=None, arrow=False,
-                                       data_name='default_exp', ids=None,
-                                       bond_cut_off=None,
-                                       trap_filename=None, trap_lcr=None):  # show_traps=False,):
+    def plot_neighbor_change_evolution_finetune(self, frame_init, frame_final, prefix='',
+                                                nb_change=None, arrow=False,
+                                                data_name='default_exp', ids=None,
+                                                bond_cut_off=None, trap_filename=None,
+                                                trap_lcr=None):  # show_traps=False,):
         R"""
         input:
             arrow: 'direct' or 'annotate'
@@ -2101,14 +2102,18 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
 
         xy_init = self.txyz_stable[frame_init, :, :2]
         xy_final = self.txyz_stable[frame_final, :, :2]
-        particle_size = 50
+        particle_size = 200  # 50
         circle_size = particle_size
-        lw = 2  # circle linewidths
-        circle_color = 'limegreen'  # 'orange'
-        arrow_color = 'limegreen'
-
+        lw = 4  # 2  # circle linewidths
+        circle_color = np.array([100, 143, 255])/255.0  # 'orange'
+        arrow_color = circle_color
+        back_ratio = 0.5  # 0
+        arrow_scale = 0.8  # 1
+        arrow_width = 0.015
+        bond_width = 2  # 3
         bpm = bond_plot_module()
-        bpm.restrict_axis_property_relative(xy_init, '($\sigma$)')
+        # bpm.restrict_axis_property_relative('($\sigma$)')
+        bpm.restrict_axis_property_relative(hide_axis=True)
         # bpm.ax.set_xlim(3,16)#plt.xlim(-dis+center[0],dis+center[0])
         # bpm.ax.set_ylim(-12,1)#plt.ylim(-dis+center[1],dis+center[1])
 
@@ -2118,10 +2123,9 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
             a_frame.get_first_minima_bond_length_distribution(
                 lattice_constant=1, hist_cutoff=bond_cut_off)  # ,png_filename=png_filename1
             check = [0.4, a_frame.bond_first_minima_left]
-            bpm.draw_points_with_conditional_bond(
-                xy_init, a_frame.bond_length, check, particle_size=particle_size)
-        else:
-            bpm.draw_points_with_conditional_bond(xy_init)
+            list_bond_index = bpm.get_bonds_with_conditional_bond_length(a_frame.bond_length, check)
+            bpm.draw_points_with_given_bonds(
+                xy_init, list_bond_index, particle_size=particle_size, bond_width=bond_width)
         # bpm.ax.set_xlim(3,16)#plt.xlim(-dis+center[0],dis+center[0])
         # bpm.ax.set_ylim(-12,1)#plt.ylim(-dis+center[1],dis+center[1])
 
@@ -2146,16 +2150,144 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
                         xy_init[ids, 1],
                         xy_final[ids, 0] - xy_init[ids, 0],
                         xy_final[ids, 1] - xy_init[ids, 1],
-                        color=arrow_color, angles='xy', scale_units='xy', scale=1)
+                        color=arrow_color, angles='xy', scale_units='xy', scale=arrow_scale)
                 elif arrow == 'annotate':  # annotate_arrow
                     dxy, uv, ids = self.__annotate_arrow(xy_init, xy_final, ids)
                     # move arrow a little away from in situ points.
-                    bpm.ax.quiver(
-                        xy_init[ids, 0] + dxy[:, 0],
-                        xy_init[ids, 1] + dxy[:, 1],
+                    bpm.ax.quiver(  # dxy-stand by side;-uv step back
+                        xy_init[ids, 0] + dxy[:, 0]-uv[:, 0]*back_ratio,
+                        xy_init[ids, 1] + dxy[:, 1]-uv[:, 1]*back_ratio,
                         uv[:, 0],
                         uv[:, 1],
-                        color=arrow_color, angles='xy', scale_units='xy', scale=1)
+                        color=arrow_color, angles='xy', scale_units='xy', scale=arrow_scale,
+                        width=arrow_width)
+
+                bpm.ax.scatter(
+                    xy_final[ids, 0],
+                    xy_final[ids, 1],
+                    facecolors=circle_color, marker='x', s=circle_size,
+                    linewidths=lw,
+                    zorder=4)
+                """
+                bpm.ax.scatter(
+                    xy_final[ids, 0],
+                    xy_final[ids, 1],
+                    facecolors='none', edgecolors=circle_color, marker='o', s=circle_size,
+                    linewidths=lw)  # circle, facecolors='none',fillstyle='none'[x]
+                """
+                """
+                ax.annotate("", xy=(0.5, 0.5), xytext=(0, 0),
+                ...             arrowprops=dict(arrowstyle="->"))
+                https://matplotlib.org/stable/tutorials/text/annotations.html#sphx-glr-tutorials-text-annotations-py
+                """
+        else:  # force ax to draw scatter using given ids
+            bpm.ax.scatter(
+                xy_final[ids, 0],
+                xy_final[ids, 1],
+                facecolors=circle_color, marker='x', s=circle_size,
+                linewidths=lw,
+                zorder=4)
+            """
+            bpm.ax.scatter(
+                xy_final[ids, 0],
+                xy_final[ids, 1],
+                facecolors='none', edgecolors=circle_color, marker='o', s=circle_size,
+                linewidths=lw)
+            """
+        # draw traps
+        if not trap_filename is None:
+            bpm.plot_traps(trap_filename=trap_filename, LinearCompressionRatio=trap_lcr, mode='map')
+        restrict = True
+        if restrict:
+            bpm.restrict_axis_limitation([-5, 10], [-10, 5])
+            # bpm.restrict_axis_limitation([-12.5, 2.5], [-12.5, 2.5])
+            # bpm.restrict_axis_limitation([2, 17], [-15, 0])
+            # bpm.restrict_axis_limitation([5, 20], [5, 20])
+            # bpm.restrict_axis_limitation([-10, 5], [-13, 2])
+
+        # '.pdf'
+        png_filename2 = prefix + 'string_like_motion'+str_index+'_'+str(int(frame_init))+'.pdf'
+        bpm.save_figure(png_filename2)
+
+        return ids
+
+    def plot_neighbor_change_evolution(self, frame_init, frame_final, prefix='', nb_change=None, arrow=False,
+                                       data_name='default_exp', ids=None,
+                                       bond_cut_off=None,
+                                       trap_filename=None, trap_lcr=None):  # show_traps=False,):
+        R"""
+        input:
+            arrow: 'direct' or 'annotate'
+            bond_cut_off: 6 recommended(2 times lattice constant)
+        return:
+            ids
+        plots:    
+            black dots: particles of initial state.
+            orange circles: particles of final state.
+            green arrows: displacements between final nad initial states.
+        """
+        str_index = data_name
+
+        xy_init = self.txyz_stable[frame_init, :, :2]
+        xy_final = self.txyz_stable[frame_final, :, :2]
+        particle_size = 50
+        circle_size = particle_size
+        lw = 2  # circle linewidths
+        circle_color = 'limegreen'  # 'orange'
+        arrow_color = 'limegreen'
+        back_ratio = 0
+        arrow_scale = 1
+        arrow_width = 0.015
+        bpm = bond_plot_module()
+        bpm.restrict_axis_property_relative('($\sigma$)')
+        # bpm.restrict_axis_property_relative(hide_axis=True)
+        # bpm.ax.set_xlim(3,16)#plt.xlim(-dis+center[0],dis+center[0])
+        # bpm.ax.set_ylim(-12,1)#plt.ylim(-dis+center[1],dis+center[1])
+
+        # draw bonds
+        if not bond_cut_off is None:
+            a_frame = static_points_analysis_2d(points=xy_init)
+            a_frame.get_first_minima_bond_length_distribution(
+                lattice_constant=1, hist_cutoff=bond_cut_off)  # ,png_filename=png_filename1
+            check = [0.4, a_frame.bond_first_minima_left]
+            list_bond_index = bpm.get_bonds_with_conditional_bond_length(a_frame.bond_length, check)
+            bpm.draw_points_with_given_bonds(
+                xy_init, list_bond_index, particle_size=particle_size)
+        # bpm.ax.set_xlim(3,16)#plt.xlim(-dis+center[0],dis+center[0])
+        # bpm.ax.set_ylim(-12,1)#plt.ylim(-dis+center[1],dis+center[1])
+
+        # draw circles & arrows of the next frame
+        if ids is None:
+            if nb_change is None:
+                ids = None
+                bpm.ax.scatter(
+                    xy_final[:, 0],
+                    xy_final[:, 1],
+                    facecolors='none', edgecolors=circle_color, marker='o', s=circle_size,
+                    linewidths=lw)
+            else:
+                list_sum_id_nb_stable = nb_change
+                snap = list_sum_id_nb_stable[list_sum_id_nb_stable['frame'] == frame_final]
+                snap_part = snap[snap['if_nb_change'] == True]
+                ids = snap_part["particle_id"].values
+
+                if arrow == 'direct':  # direct_arrow
+                    bpm.ax.quiver(
+                        xy_init[ids, 0],
+                        xy_init[ids, 1],
+                        xy_final[ids, 0] - xy_init[ids, 0],
+                        xy_final[ids, 1] - xy_init[ids, 1],
+                        color=arrow_color, angles='xy', scale_units='xy', scale=arrow_scale)
+                elif arrow == 'annotate':  # annotate_arrow
+                    dxy, uv, ids = self.__annotate_arrow(xy_init, xy_final, ids)
+                    # move arrow a little away from in situ points.
+                    bpm.ax.quiver(  # dxy-stand by side;-uv step back
+                        xy_init[ids, 0] + dxy[:, 0]-uv[:, 0]*back_ratio,
+                        xy_init[ids, 1] + dxy[:, 1]-uv[:, 1]*back_ratio,
+                        uv[:, 0],
+                        uv[:, 1],
+                        color=arrow_color, angles='xy', scale_units='xy', scale=arrow_scale,
+                        width=arrow_width)
 
                 bpm.ax.scatter(
                     xy_final[ids, 0],
@@ -2176,9 +2308,8 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
 
         # draw traps
         if not trap_filename is None:
-            bpm.plot_traps(trap_filename, trap_lcr, 'map')
+            bpm.plot_traps(trap_filename=trap_filename, LinearCompressionRatio=trap_lcr, mode='map')
 
-        # '.pdf'
         png_filename2 = prefix + 'string_like_motion'+str_index+'_'+str(int(frame_init))+'.png'
         bpm.save_figure(png_filename2)
 
@@ -2387,23 +2518,24 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
         dr = np.sqrt(dr2[:, 0]+dr2[:, 1])
 
         # normalize arrow length part2
-        uv[:, 0] = uv[:, 0]/dr
-        uv[:, 1] = uv[:, 1]/dr
+        uv_unit = np.array(uv)
+        uv_unit[:, 0] = uv[:, 0]/dr
+        uv_unit[:, 1] = uv[:, 1]/dr
         rotate = np.zeros((2, 2))
         rotate[0, 0] = np.cos(np.pi/2)
         rotate[1, 1] = np.cos(np.pi/2)
         rotate[1, 0] = np.sin(-np.pi/2)
         rotate[0, 1] = np.sin(np.pi/2)
         # move arrow a little away from in situ points.
-        scale_away = 0.5
+        scale_away = 0.8  # 0.5
         # rotate operator is on the right side,
         # so rotational direction is inverted.
         # to let rotation match intuition,
         # I inverted rotation operator too.
-        dxy = np.matmul(uv, rotate)*scale_away
+        dxy = np.matmul(uv_unit, rotate)*scale_away
         # tune the length of arrow
         scale_arrow = 1
-        uv = uv*scale_arrow
+        uv = uv_unit*scale_arrow
 
         return dxy, uv, ids
 
@@ -3527,8 +3659,22 @@ class bond_plot_module:
         self.ax.set_xlim(xlim[0], xlim[1])
         self.ax.set_ylim(ylim[0], ylim[1])
 
+    def plot_scale_bar(self, tx=-24.5, ty=12, bar_span=5):
+        tstring = str(bar_span)+' $\mu$m'
+        zi = 2
+        self.ax.text(tx, ty, tstring, horizontalalignment='center', zorder=zi)
+        down_shift = 0.2
+        bar_height = 1
+        lx = [tx-0.5*bar_span, tx+0.5*bar_span]
+        ly = [ty-down_shift-bar_height, ty-down_shift]
+        # ax.plot(lx,ly,c='k',linewidth=4,zorder=zi)
+        list_points_xy = np.array([[lx[0], ly[0]], [lx[1], ly[0]], [
+                                  lx[1], ly[1]], [lx[0], ly[1]], [lx[0], ly[0]]])
+        self.ax.fill(list_points_xy[:, 0], list_points_xy[:, 1],
+                     facecolor='k', edgecolor='k', linewidth=0.01)
+
     def draw_points_with_given_bonds(
-            self, xy, list_bonds_index=None, particle_size=None, bond_color='b', particle_color='k',
+            self, xy, list_bonds_index=None, particle_size=None, bond_color='k', particle_color='k',
             bond_width=None):
         R"""
         Parameters:
