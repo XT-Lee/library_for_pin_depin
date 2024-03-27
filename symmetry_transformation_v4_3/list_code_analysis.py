@@ -42,7 +42,7 @@ class analyze_a_gsd_file:
 
     def analyze_gsd_files_and_record_as_csv(self):
         import pandas as pd
-        prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/"
+        prefix_write = "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/"
 
         output_file_csv = prefix_write+'honeycomb_pin_scan_k100_1000'+'.csv'
         n_file = 10
@@ -106,7 +106,7 @@ class analyze_a_gsd_file:
             print(ss.gsd_data[i].configuration.box)
             # print(ss.gsd_data[i].configuration.box.dimensions)
             lf = ac.get_data_from_a_gsd_frame(ss.gsd_data[i])
-            png_filename = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/' + \
+            png_filename = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/' + \
                 str(ss.simu_index)+'_'+str(i)+'.png'
             lf.get_bonds_png_from_a_gsd_frame(png_filename)
 
@@ -131,10 +131,10 @@ class analyze_a_series_of_gsd_file:
                 print(fn)
                 asg.get_cnks_from_csv_files_type_n_part(fn)
         example2:
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv"#0-6
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv"#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv"#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"#0-9
+            "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv"#0-6
+            "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv"#0-9
+            "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv"#0-9
+            "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"#0-9
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
         import workflow_analysis as wa
@@ -213,7 +213,7 @@ class analyze_a_series_of_gsd_file:
                           "lcr", 'trap_gauss_epsilon', 'temperature'])
         df['cn3'] = list_cn3
         # df.sort_values(by=['seed','trap_gauss_epsilon'])
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/'
         csv_filename = prefix_write + 'honeycomb_pin_scan_k3_1000.csv'
         pd.DataFrame.to_csv(df, csv_filename)
         return list_cn3
@@ -258,7 +258,7 @@ class analyze_a_series_of_gsd_file:
         plt.close()"""
 
         # df.sort_values(by=['seed','trap_gauss_epsilon'])
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         csv_filename = prefix_write + 'honeycomb_part_pin_lcr80_scan_k3_1000.csv'
         pd.DataFrame.to_csv(df, csv_filename)
         return list_cn3
@@ -268,7 +268,7 @@ class analyze_a_series_of_gsd_file:
             lcr0.81 honeycomb pin
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        """prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        """prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         index1 = 6013
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_'+str(int(index1))+'.csv'"""
         ggfs = ac.get_gsds_from_mysql_or_csv()
@@ -303,7 +303,7 @@ class analyze_a_series_of_gsd_file:
         plt.show()
         plt.close()"""
         # df.sort_values(by=['seed','trap_gauss_epsilon'])
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         csv_filename = prefix_write+'pin_hex_to_honeycomb_part_klt_2m_gauss_6013_19_res.csv'
         # csv_filename = prefix_write + 'honeycomb_part_pin_lcr81_scan_k3_1000_fill_brownian.csv'
         pd.DataFrame.to_csv(df, csv_filename)
@@ -316,7 +316,7 @@ class analyze_a_series_of_gsd_file:
         asg = lca.analyze_a_series_of_gsd_file()
         asg.get_cnks_from_csv_type_4569_part()
         """
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
 
         # generate_simu_index_csv_type_4_pin_3_30()
         index1 = 6963  # 6823#[x]
@@ -353,7 +353,7 @@ class analyze_a_series_of_gsd_file:
             asg.get_cn5s_from_csv_files()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 6733  # index1 = 6643
         output_file_csv = prefix_write + \
             'pin_hex_to_type_11_part_klt_2m_gauss_'+str(int(index1))+'.csv'
@@ -385,7 +385,7 @@ class analyze_a_series_of_gsd_file:
             asg.get_cn5s_from_csv_files()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 6913  # 6823#[x]
         # [x]
         output_file_csv = prefix_write + \
@@ -416,7 +416,7 @@ class analyze_a_series_of_gsd_file:
             asg.get_cn4s_from_csv_files_type_8()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 243  # [x]
         # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_8_klt_2m_gauss_'+str(int(index1))+'.csv'
@@ -449,7 +449,7 @@ class analyze_a_series_of_gsd_file:
             asg.get_cn4s_from_csv_files_type_8_part()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 513  # [x]
         # [x]
         output_file_csv = prefix_write + \
@@ -483,7 +483,7 @@ class analyze_a_series_of_gsd_file:
         agp = agf.get_cn3s_from_csv_files_type_3()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         gg = ac.get_gsds_from_mysql_or_csv()
         gsds_filename = gg.get_record_from_csv(output_file_csv)
@@ -513,7 +513,7 @@ class analyze_a_series_of_gsd_file:
             asg.get_cn3s_from_csv_files_type_3_part()
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         gg = ac.get_gsds_from_mysql_or_csv()
         gsds_filename = gg.get_record_from_csv(output_file_csv)
@@ -541,7 +541,7 @@ class analyze_a_series_of_gsd_file:
         import symmetry_transformation_v4_3.analysis_controller as ac
         # import symmetry_transformation_v4_3.simulation_controller as sc
         # sct = sc.simulation_controller_honeycomb_part_traps()
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         index1 = 6013
         output_file_csv = prefix_write + \
             'pin_hex_to_honeycomb_part_klt_2m_gauss_'+str(int(index1))+'_not8.csv'
@@ -572,9 +572,9 @@ class analyze_a_series_of_gsd_file:
 
     def plot_from_csv(self):
         import pandas as pd
-        """prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        """prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/'
         csv_filename = prefix_write + 'honeycomb_pin_scan_k3_1000.csv'"""
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         csv_filename = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6013_09.csv'
         df = pd.read_csv(csv_filename)
         df.sort_values(by=['seed', 'trap_gauss_epsilon'], ascending=False,
@@ -722,9 +722,9 @@ class analyze_a_series_of_gsd_file:
         return fig, ax
 
     def get_2_k_cn3_stds_and_plot(self):
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/'
         csv_filename = prefix_write + 'honeycomb_pin_scan_k3_1000.csv'
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_part_pin/'
         csv_filename2 = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6013_09.csv'
         record_k_cn3_std1 = self.get_k_cn3_stds_from_csv(csv_filename)
         record_k_cn3_std2 = self.get_k_cn3_stds_from_csv(csv_filename2)
@@ -740,7 +740,7 @@ class analyze_a_series_of_gsd_file:
             lcr0.81 honeycomb pin
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        # prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/'
+        # prefix_write = '/home/remote/xiaotian_file/link_to_HDD//hoomd-examples_0/'
         # index0 = 7223  # 6302
         for i in range(10):
             index1 = index0+i  # 658#
@@ -764,7 +764,7 @@ class analyze_a_series_of_gsd_file:
             lcr0.81 honeycomb pin
         """
         import symmetry_transformation_v4_3.analysis_controller as ac
-        # prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/'
+        # prefix_write = '/home/remote/xiaotian_file/link_to_HDD//hoomd-examples_0/'
         # index0 = 7223  # 6302
         for i in range(10):
             index1 = index0+i  # 658#
@@ -814,7 +814,7 @@ class analyze_a_series_of_gsd_file:
         """
         import pandas as pd
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_csv = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'  # type_n_depin/
+        prefix_csv = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_depin/'  # type_n_depin/
         filename_csv = prefix_csv + 'depin_type_n_from_type_n_part_klt_2m_gauss_7163.csv'
         # 'pin_hex_to_type_n_part_klt_2m_gauss_6613.csv'#
         # depin_type_n_from_type_n_part_klt_2m_gauss_7163,6053,6293
@@ -849,7 +849,7 @@ class analyze_a_series_of_gsd_file:
         """
         import pandas as pd
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 6733  # index1 = 6643
         output_file_csv = prefix_write + \
             'pin_hex_to_type_11_part_klt_2m_gauss_'+str(int(index1))+'.csv'
@@ -882,7 +882,7 @@ class analyze_a_series_of_gsd_file:
         """
         import pandas as pd
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 6643  # index1 = 6733#
         output_file_csv = prefix_write + \
             'pin_hex_to_type_10_part_klt_2m_gauss_'+str(int(index1))+'.csv'
@@ -915,7 +915,7 @@ class analyze_a_series_of_gsd_file:
         """
         import pandas as pd
         import symmetry_transformation_v4_3.analysis_controller as ac
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         # index1 = 6643#index1 = 6733#
         # +str(int(index1))+
         output_file_csv = prefix_write + 'pin_hex_to_type_7_part_klt_2m_gauss_merge.csv'
@@ -939,7 +939,7 @@ class analyze_a_series_of_gsd_file:
 
     def analyze_gsd_files_and_record_as_csv(self):
         import pandas as pd
-        prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/"
+        prefix_write = "/home/remote/xiaotian_file/link_to_HDD//record_results_v430/honeycomb_pin/"
 
         output_file_csv = prefix_write+'honeycomb_pin_scan_k100_1000'+'.csv'
         n_file = 10
@@ -987,7 +987,7 @@ class analyze_a_series_of_gsd_file_dynamic:
         for i in range(4):
             dac.get_diagram_from_csv_type_n(csvs[i],types[i],parts[i])
         """
-        # prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        # prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         # index1 = 6733#index1 = 6643
         output_file_csv = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         # depin_type_n_from_type_n_part_klt_2m_gauss_6053,6293
@@ -1037,8 +1037,8 @@ class analyze_a_series_of_gsd_file_dynamic:
         import points_analysis_2D as pa
         import data_analysis_cycle as dac
         import symmetry_transformation_v4_3.simulation_core as sc
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
-        prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/record_trajectories'
+        prefix_read = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430'
         dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
@@ -1082,7 +1082,7 @@ class analyze_a_series_of_gsd_file_dynamic:
                 # prefix_new = pfs.create_folder(prefix_write+'/', str_simu_index)
                 gdf = ac.get_data_from_a_trajectory(simu_index, seed)
                 """
-                prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+                prefix_write = "/home/remote/xiaotian_file/link_to_HDD//hoomd-examples_1/"
                 output_file_gsd = prefix_write+'trajectory_auto' + \
                     str(int(simu_index))+'_'+str(int(seed))+'.gsd'
                 # sct = sc.simulation_core_traps(simu_index, seed)
@@ -1141,8 +1141,8 @@ class analyze_a_series_of_gsd_file_dynamic:
         import points_analysis_2D as pa
         import data_analysis_cycle as dac
         import symmetry_transformation_v4_3.simulation_core as sc
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
-        prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/record_trajectories'
+        prefix_read = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430'
         dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
@@ -1163,7 +1163,7 @@ class analyze_a_series_of_gsd_file_dynamic:
         # record cn vca
         rvv = -np.ones((len(list_simu_index), 2))  # np.zeros((240, 2))
         # (6392, 6602, 8, dtype=int)  # temp
-        target_simu_index = np.linspace(532, 772, 9, dtype=int)
+        target_simu_index = np.linspace(532, 772, 9, dtype=int)  # (532, 772, 9, dtype=int)
         for i in range(len(list_simu_index)):
             # i >= 0 and i <= 269:  # i >= 240 and i <= 479:  # i >= 0 and i <= 239:  # i >= start and i <= start+29:
             if i >= 0 and i <= index_uplimit:
@@ -1172,7 +1172,7 @@ class analyze_a_series_of_gsd_file_dynamic:
                     seed = list_seed[i]
                     lcr = list_lcr[i]
 
-                    prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+                    prefix_write = "/home/remote/xiaotian_file/link_to_HDD//hoomd-examples_1/"
                     output_file_gsd = prefix_write+'trajectory_auto' + \
                         str(int(simu_index))+'_'+str(int(seed))+'.gsd'
 
@@ -1215,8 +1215,8 @@ class analyze_a_series_of_gsd_file_dynamic:
         import points_analysis_2D as pa
         import data_analysis_cycle as dac
         import symmetry_transformation_v4_3.simulation_core as sc
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/record_trajectories'
-        prefix_read = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/record_trajectories'
+        prefix_read = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430'
         dir_h = '/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         dir_hp = '/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         dir_kg = '/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv'
@@ -1281,7 +1281,7 @@ class analyze_a_csv_file:
         R"""
         | simu_index | seed | lcr  | trap_gauss_epsilon | temperature | type_n | cnk | U_eq |
         """
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD//record_results_v430/type_n_pin/'
         index1 = 513  # [x]
         # [x]
         output_file_csv = prefix_write + \

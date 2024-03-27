@@ -1537,28 +1537,39 @@ class archimedean_tilings_polygon_dye:
         # plt.close('all')
         del at_part
 
-    def workflow_type_n_pure_background(self, type_n, xylim=5, n_plus=3, part=False):
+    def workflow_type_n_pure_background(
+            self, type_n, xylim=5, n_plus=3, color_particle='k', part=False, follow_points=True):
         R"""
         import workflow_analysis as wa
         atpd = wa.archimedean_tilings_polygon_dye()
         for i in range(9):
             atpd.workflow_type_n(i+3)
         """
+        particle_size = 300  # 300/xylim
+        bond_width = 5  # 10/xylim
         at_part = archimedean_tilings()
-        at_part.generate_type_n_part(type_n)  # <delta>
-        png_filename = 'polygon_dye_colorblind_type'+str(type_n)+'.png'  # <delta>_colorblind
+        if part:
+            at_part.generate_type_n_part(type_n)  # <delta>
+            # <delta>_colorblind
+            png_filename = 'polygon_dye_colorblind_type'+str(type_n)+'_part.png'
+        else:
+            at_part.generate_type_n(type_n)
+            png_filename = 'polygon_dye_colorblind_type'+str(type_n)+'.png'  # <delta>_colorblind
         vec = at_part.a1+at_part.a2
         n1 = int(np.around(2*xylim/vec[0], 0)+n_plus)
         n2 = int(np.around(2*xylim/vec[1], 0)+n_plus)
         points = at_part.generate_lattices([n1, n2])  # 1.73:2
         # dula = at.get_dual_lattice(points)
         fig, ax = plt.subplots()
-        ax.scatter(points[:, 0], points[:, 1], color='k', zorder=3)
+        ax.scatter(points[:, 0], points[:, 1], s=particle_size, color=color_particle, zorder=3)
         # ax.scatter(dula[:,0],dula[:,1],facecolors='white',edgecolors='k',zorder=3)
         # draw bonds selected
-        at_full = archimedean_tilings()
-        at_full.generate_type_n(type_n)  # <delta>
-        pointsb = at_full.generate_lattices([n1, n2])
+        if follow_points:
+            pointsb = points
+        else:
+            at_full = archimedean_tilings()
+            at_full.generate_type_n(type_n)  # <delta>
+            pointsb = at_full.generate_lattices([n1, n2])
         perturbation = np.random.random(pointsb.shape)*0.01
         pointsb = pointsb + perturbation  # precisely equalled bond will let delaunay disfunction!
         p2d = pa.static_points_analysis_2d(pointsb, hide_figure=False)
@@ -1566,18 +1577,16 @@ class archimedean_tilings_polygon_dye:
             lattice_constant=1)  # png_filename='bond_hist.png'
         bpm = pa.bond_plot_module(fig, ax)
         bpm.restrict_axis_property_relative(hide_axis=True)
+        # bpm.restrict_axis_property_relative(x_unit='(1)')
         list_bond_index = bpm.get_bonds_with_conditional_bond_length(
             p2d.bond_length, [0.8, p2d.bond_first_minima_left])
-        bpm.draw_points_with_given_bonds(pointsb, list_bond_index, bond_color='k', particle_size=1)
-        del at_full
+        bpm.draw_points_with_given_bonds(pointsb, list_bond_index,
+                                         bond_color='k', bond_width=bond_width, particle_size=1)
+        # del at_full
         # bpm.draw_points_with_given_bonds(points,list_bond_index,bond_color='k',particle_color='r')#p2d.bond_length[:,:2].astype(int)
         # draw polygons selected
-        count_polygon_relative = p2d.get_conditional_bonds_and_simplices_bond_length()  # lower z rectangle background
-        fig, ax = p2d.draw_polygon_patch_oop(fig, ax, self.color3, polygon_n=3)
-        fig, ax = p2d.draw_polygon_patch_oop(fig, ax, self.color4, polygon_n=4)
-        fig, ax = p2d.draw_polygon_patch_oop(fig, ax, self.color6, polygon_n=6)
-        fig, ax = p2d.draw_polygon_patch_oop(fig, ax, self.color8, polygon_n=8)
-        fig, ax = p2d.draw_polygon_patch_oop(fig, ax, self.color12, polygon_n=12)
+        # bpm.plot_scale_bar(0, 0, 1)
+        bpm.plot_background(0, 0, 10, self.color12), 'k'
         # ax.set_aspect('equal','box')
         ax.set_xlim([-xylim, xylim])
         ax.set_ylim([-xylim, xylim])

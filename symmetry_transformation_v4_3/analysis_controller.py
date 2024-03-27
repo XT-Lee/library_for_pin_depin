@@ -8,8 +8,8 @@ class get_a_gsd_from_setup:
         pass
 
     def set_file_parameters(self, simu_index, seed, read=True):
-        self.prefix_read = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
-        self.prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        self.prefix_read = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
+        self.prefix_write = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         self.seed = seed
         self.simu_index = simu_index
         self.input_file_gsd = self.prefix_write+'trajectory_auto' + \
@@ -21,8 +21,8 @@ class get_a_gsd_from_setup:
             self.gsd_data = gsd.hoomd.open(self.input_file_gsd)
 
     def set_file_parameters0(self, simu_index, seed):
-        self.prefix_read = "/media/remote/32E2D4CCE2D49607/file_lxt/record_cairo/"  # hoomd-examples_0
-        self.prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/record_cairo/"  # /hoomd-examples_0
+        self.prefix_read = "/home/remote/xiaotian_file/link_to_HDD/record_cairo/"  # hoomd-examples_0
+        self.prefix_write = "/home/remote/xiaotian_file/link_to_HDD/record_cairo/"  # /hoomd-examples_0
         self.seed = seed
         self.simu_index = simu_index
         self.input_file_gsd = self.prefix_write+'trajectory_auto' + \

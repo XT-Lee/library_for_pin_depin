@@ -278,8 +278,8 @@ class particle_track:
 
         return f1
 
-    def save_feature(self):
-        pd.DataFrame.to_csv(self.f, 'feature_single_frame.csv')
+    def save_feature(self, csv_filename='feature_single_frame.csv'):
+        pd.DataFrame.to_csv(self.f, csv_filename)
 
     def folder_frames_particle_tracking(
             self, dir_path, Diameter=19, minmass=1000, feature_filename='feature.csv'):

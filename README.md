@@ -31,6 +31,9 @@
 - particle_decorate
 
 ## log:
+- 20240319 add plot_background in points_analysis_2D.bond_plot_module.
+			edit save_feature in particle_tracking.particle_track
+			add tune_pix2um, tune_um2pix in get_a_from_image.show_points_select
 - 20240318 edit get_trap_positions in particle_tracking.save_points_from_exp
 			add control_table_image_proceed
 			edit restrict_axis_property_relative,plot_scale_bar in points_analysis_2D_freud.bond_plot_module_for_image

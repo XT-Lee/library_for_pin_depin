@@ -3673,6 +3673,15 @@ class bond_plot_module:
         self.ax.fill(list_points_xy[:, 0], list_points_xy[:, 1],
                      facecolor='k', edgecolor='k', linewidth=0.01)
 
+    def plot_background(self, tx=-24.5, ty=12, bar_span=5, color='r'):
+        lx = [tx-0.5*bar_span, tx+0.5*bar_span]
+        ly = [ty-0.5*bar_span, ty+0.5*bar_span]
+
+        list_points_xy = np.array([[lx[0], ly[0]], [lx[1], ly[0]], [
+                                  lx[1], ly[1]], [lx[0], ly[1]], [lx[0], ly[0]]])
+        self.ax.fill(list_points_xy[:, 0], list_points_xy[:, 1],
+                     facecolor=color, edgecolor=color, linewidth=1)
+
     def draw_points_with_given_bonds(
             self, xy, list_bonds_index=None, particle_size=None, bond_color='k', particle_color='k',
             bond_width=None):
@@ -5492,7 +5501,7 @@ class energy_computer:
         simu_index = str(index1)+'_'+str(seed)
         file_txyz = '/home/remote/Downloads/'+simu_index+'/txyz.npy'  # _stable
         file_reference_points = '/home/remote/hoomd-examples_0/testhoneycomb3-8-12'
-        # /media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/testhoneycomb3-8-12-part1
+        # /home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/testhoneycomb3-8-12-part1
         # '/home/remote/hoomd-examples_0/testhoneycomb3-8-12'
         txyz = np.load(file_txyz)
         reference_points = np.loadtxt(file_reference_points)

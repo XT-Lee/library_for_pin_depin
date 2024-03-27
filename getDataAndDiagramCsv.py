@@ -75,6 +75,7 @@ class diagram_plot_module:
     def set_figure_elements(self, xlabel_name='$\\rho_t/\\rho_p$', ylabel_name='$U_t/k_{B}T$'):
         self.ax.set_xlabel(xlabel_name)
         self.ax.set_ylabel(ylabel_name)
+        self.ax.tick_params(axis='both', which='both', direction='in')
 
     def draw_diagram_scatter_oop(self):  # ,data,title_name,xlabel_name,ylabel_name,prefix,postfix
         sc = self.ax.scatter(self.rhos, self.us, c=self.cnks, cmap='plasma')
@@ -111,10 +112,10 @@ class diagram_plot_module:
 
 def get_diagram_binary_from_csv_type_n(type_n, part, csv_filename=None, save=False):
     """
-    output_file_csvs = ["/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv",#0-6
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv",#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv",#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"]#0-9
+    output_file_csvs = ["/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv",#0-6
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv",#0-9
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv",#0-9
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"]#0-9
     seed_lims = [6,9,9,9]
     import symmetry_transformation_v4_3.list_code_analysis as lca
     asg = lca.analyze_a_series_of_gsd_file()
@@ -174,10 +175,10 @@ def get_diagram_binary_from_csv_type_n(type_n, part, csv_filename=None, save=Fal
 
 def get_diagram_from_csv_type_n(csv_filename, type_n, part):
     """
-    output_file_csvs = ["/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv",#0-6
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv",#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv",#0-9
-            "/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"]#0-9
+    output_file_csvs = ["/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv",#0-6
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv",#0-9
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/pin_hex_to_type_8_klt_2m_gauss_243.csv",#0-9
+            "/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/pin_hex_to_type_8_part_klt_2m_gauss_513.csv"]#0-9
     seed_lims = [6,9,9,9]
     import symmetry_transformation_v4_3.list_code_analysis as lca
     asg = lca.analyze_a_series_of_gsd_file()

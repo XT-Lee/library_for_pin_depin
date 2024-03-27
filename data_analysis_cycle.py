@@ -335,12 +335,12 @@ def save_from_gsd(
         account='remote',)
     """
     import freud
-    # prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/"
+    # prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/"
     prefix = "/home/tplab/hoomd-examples_0/record/"
     log_prefix = prefix
     # prefix='/home/'+account+'/Downloads/'#'/home/tplab/Downloads/'
     # log_prefix='/home/'+account+'/hoomd-examples_0/'#'/home/tplab/hoomd-examples_0/'
-    # /media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/testhoneycomb3-8-12-part1
+    # /home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/testhoneycomb3-8-12-part1
 
     # load time steps
     if seed is None:
@@ -752,10 +752,10 @@ def save_from_gsd_to_cn3(simu_index=None, seed=None, frame_cut=0,
     example:
 
     """
-    # prefix='/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/'#'/home/'+account+'/Downloads/cn3-t/'#'/home/tplab/Downloads/'
+    # prefix='/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/'#'/home/'+account+'/Downloads/cn3-t/'#'/home/tplab/Downloads/'
     # '/home/'+account+'/hoomd-examples_0/'#'/home/tplab/hoomd-examples_0/'
-    log_prefix = '/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/'
-    # /media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/
+    log_prefix = '/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/'
+    # /home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/
     # load time steps
     if seed is None:
         str_index = str(int(simu_index))

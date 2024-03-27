@@ -1924,8 +1924,8 @@ class show_pin_interstitial_order_parameter_v43:
             record_pd.to_csv(result_prefix+'t_trans_event_coarse.csv')
 
         else:
-            list_index1 = np.linspace(dt, self.sz[0]-1, self.sz[0]-dt)
-            list_index2 = range(self.sz[0])
+            list_index2 = np.linspace(dt, self.sz[0]-1, self.sz[0]-dt)
+            list_index1 = np.linspace(0, self.sz[0]-1, self.sz[0])  # range(self.sz[0])
             record_pd = pd.DataFrame(
                 {'t(step)': list_index1 * 1e3, 't_trans_ratio(1)': t_trans_ratio,
                  'pin_ratio(1)': t_pin_ratio, 't_interstitial_ratio(1)': t_interstitial_ratio})

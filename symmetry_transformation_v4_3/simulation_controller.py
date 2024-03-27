@@ -23,7 +23,7 @@ class simulation_controller_honeycomb_traps:
             sct.generate_initial_state_hexagonal_particle_honeycomb_trap()
         """
 
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/"
         filename_initial_state = 'particle_hex_and_trap_honeycomb'
         gsd_filename = prefix+filename_initial_state+'.gsd'
 
@@ -104,7 +104,7 @@ class simulation_controller_honeycomb_traps:
         list_simu_index = np.linspace(5773, 5782, n_files, dtype=int)
         list_gauss_epsilon = np.linspace(-3, -30, n_files)
 
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/"
         filename_initial_state = 'particle_hex_and_trap_honeycomb'
         init_gsd_filename = prefix+filename_initial_state+'.gsd'  # describe the lcr
 
@@ -175,7 +175,7 @@ class simulation_controller_honeycomb_traps:
 
     def generate_simu_index_csv_6373(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
         index1 = 6373  # 5813
         # 'pin_hex_to_honeycomb_klt_2m_gauss.csv'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_'+str(index1)+'.csv'
@@ -211,7 +211,7 @@ class simulation_controller_honeycomb_traps:
 
     def generate_simu_index_csv_5773_5812(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_5773_5812.csv'
         index1 = 5773
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -259,7 +259,7 @@ class simulation_controller_honeycomb_traps:
 
     def generate_simu_index_csv_5813_5812(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_5773_5812.csv'
         index1 = 5773
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -307,7 +307,7 @@ class simulation_controller_honeycomb_traps:
 
     def generate_simu_index_csv_3_242(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
         index1 = 3
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -341,7 +341,7 @@ class simulation_controller_honeycomb_traps:
 
     def record_simu_csv_into_sql(self):
         import opertateOnMysql as osql
-        filename_csv = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/honeycomb_pin_scan_k3_60_simu.csv'
+        filename_csv = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/honeycomb_pin_scan_k3_60_simu.csv'
         # osql.createTableInMysql('pin_hex_to_honeycomb_klt_2m_gauss','simu_index integer unsigned not null,seed integer unsigned not null,lcr float, trap_gauss_epsilon float, temperature float')
         osql.loadCsvDataToMysql(path_to_file_name=filename_csv,
                                 table_name='pin_hex_to_honeycomb_klt_2m_gauss')
@@ -395,7 +395,7 @@ class simulation_controller_honeycomb_traps:
             print(i+1, '/', len(list_simu_index))
 
     def generate_initial_gsd(sel, a_particle, n_size, lcr):  # deprecated
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         # filename_initial_state should be like
         # 'init_particle_<lattice_type>_<a>_<nx>_<ny>_and_trap_<lattice_type>_<int_lcr>
         # to prevent the mixing of different initial state .gsd file
@@ -452,7 +452,7 @@ class simulation_controller_honeycomb_part_traps:
 
     def generate_simu_index_csv_lcr080(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5973.csv'  # 5933,
         index1 = 5973
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -493,7 +493,7 @@ class simulation_controller_honeycomb_part_traps:
 
     def generate_simu_index_csv_lcr081(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
         index1 = 6013
         # 5933,
         output_file_csv = prefix_write + \
@@ -536,7 +536,7 @@ class simulation_controller_honeycomb_part_traps:
 
     def generate_simu_index_csv_lcr081_079(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
         index1 = 6013
         # 5933,
         output_file_csv = prefix_write + \
@@ -580,7 +580,7 @@ class simulation_controller_honeycomb_part_traps:
 
     def generate_simu_index_csv_6373_6612(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
         index1 = 6373
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -614,7 +614,7 @@ class simulation_controller_honeycomb_part_traps:
 
     def generate_simu_index_csv_6553_6612(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
         output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6553_6612.csv'
         index1 = 6553
         # list_simu_index = np.linspace(index1,index1+n_files-1,n_files,dtype=int)
@@ -660,7 +660,7 @@ class simulation_controller_honeycomb_part_traps:
             import symmetry_transformation_v4_3.simulation_controller as sc
             #import symmetry_transformation_v4_3.simulation_core as sco
             sct = sc.simulation_controller_honeycomb_part_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
             file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5933.csv'
             sct.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(file_csv)
         """
@@ -711,7 +711,7 @@ class simulation_controller_honeycomb_part_traps:
             import symmetry_transformation_v4_3.simulation_controller as sc
             #import symmetry_transformation_v4_3.simulation_core as sco
             sct = sc.simulation_controller_honeycomb_part_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
             file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5933.csv'
             sct.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(file_csv)
         """
@@ -751,7 +751,7 @@ class simulation_controller_honeycomb_part_traps:
             print(i+1, '/', len(list_simu_index))
 
     def generate_initial_gsd(sel, a_particle, n_size, lcr):
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         # filename_initial_state should be like
         # 'init_particle_<lattice_type>_<a>_<nx>_<ny>_and_trap_<lattice_type>_<int_lcr>
         # to prevent the mixing of different initial state .gsd file
@@ -822,7 +822,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_depin(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/'
         index1 = 6053
         # 5933,
         output_file_csv = prefix_write + \
@@ -869,13 +869,13 @@ class simulation_controller_type_n_part_traps:
         import symmetry_transformation_v4_3.simulation_controller as sc
         sct = sc.simulation_controller_type_n_part_traps()
         sct.generate_simu_index_csv_depin_low_t()
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/'
         index1 = 7163
         output_file_csv = prefix_write + 'depin_type_n_from_type_n_part_klt_2m_gauss_'+str(int(index1))+'.csv'
         sct.generate_initial_state_type_n_particle_type_n_part_trap_depin_scan_csv(output_file_csv)
         """
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/'
         index1 = 7163
         # 5933,
         output_file_csv = prefix_write + \
@@ -924,13 +924,13 @@ class simulation_controller_type_n_part_traps:
         import symmetry_transformation_v4_3.simulation_controller as sc
         sct = sc.simulation_controller_type_n_part_traps()
         sct.generate_simu_index_csv_depin_low_t()
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/'
         index1 = 7163
         output_file_csv = prefix_write + 'depin_type_n_from_type_n_part_klt_2m_gauss_'+str(int(index1))+'.csv'
         sct.generate_initial_state_type_n_particle_type_n_part_trap_depin_scan_csv(output_file_csv)
         """
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_depin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_depin/'
         index1 = 7203
         # 5933,
         output_file_csv = prefix_write + \
@@ -976,7 +976,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 6613
         # 5933,
         output_file_csv = prefix_write + \
@@ -1020,7 +1020,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_4_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 6963  # 6823#[x]
         list_type_n = 4  # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_'+str(
@@ -1057,7 +1057,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_5_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 7013  # 6823#[x]
         list_type_n = 5  # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_'+str(
@@ -1094,7 +1094,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_6_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 7063  # 6823#[x]
         list_type_n = 6  # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_'+str(
@@ -1131,7 +1131,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_9_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 7113  # 6823#[x]
         list_type_n = 9  # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_'+str(
@@ -1168,7 +1168,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_7_pin_3_30(self):  # not finished
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 6913  # 6823#[x]
         # [x]
         output_file_csv = prefix_write + \
@@ -1209,7 +1209,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_10_pin_3_30(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 6643
         # 5933,
         output_file_csv = prefix_write + \
@@ -1250,7 +1250,7 @@ class simulation_controller_type_n_part_traps:
 
     def generate_simu_index_csv_type_11_pin_3_30(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 6733  # [x]
         # [x]
         output_file_csv = prefix_write + \
@@ -1301,7 +1301,7 @@ class simulation_controller_type_n_part_traps:
             import symmetry_transformation_v4_3.simulation_controller as sc
             #import symmetry_transformation_v4_3.simulation_core as sco
             sct = sc.simulation_controller_honeycomb_part_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
             file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5933.csv'
             sct.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(file_csv)
         """
@@ -1350,7 +1350,7 @@ class simulation_controller_type_n_part_traps:
             import symmetry_transformation_v4_3.simulation_controller as sc
             #import symmetry_transformation_v4_3.simulation_core as sco
             sct = sc.simulation_controller_honeycomb_part_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
             file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5933.csv'
             sct.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(file_csv)
         """
@@ -1396,7 +1396,7 @@ class simulation_controller_type_n_part_traps:
         else:
             print('error: type_n should be an int between [1,11]!')
             print('\n')
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_0/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_0/"
         # filename_initial_state should be like
         # 'init_particle_<lattice_type>_<a>_<nx>_<ny>_and_trap_<lattice_type>_<int_lcr>
         # to prevent the mixing of different initial state .gsd file
@@ -1455,7 +1455,7 @@ class simulation_controller_type_n_part_traps:
         else:
             print('error: type_n should be an int between [1,11]!')
             print('\n')
-        prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         #filename_initial_state should be like 
         # 'init_particle_<lattice_type>_<a>_<nx>_<ny>_and_trap_<lattice_type>_<int_lcr>
         # to prevent the mixing of different initial state .gsd file
@@ -1494,7 +1494,7 @@ class simulation_controller_kagome_traps:
 
     def generate_simu_index_csv_kagome_pin_3_90(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 243  # [x]
         # [x]
         output_file_csv = prefix_write + 'pin_hex_to_type_8_klt_2m_gauss_'+str(int(index1))+'.csv'
@@ -1542,7 +1542,7 @@ class simulation_controller_kagome_traps:
         Example:
             import symmetry_transformation_v4_3.simulation_controller as sc
             sct = sc.simulation_controller_kagome_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
             index1 = 243#[x]
             output_file_csv = prefix_write + 'pin_hex_to_type_8_klt_2m_gauss_'+str(int(index1))+'.csv'#[x]
             #sct.generate_simu_index_csv_kagome_pin_3_90()
@@ -1596,7 +1596,7 @@ class simulation_controller_kagome_part_traps:
 
     def generate_simu_index_csv_kagome_part_pin_3_90(self):
         # series setup
-        prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+        prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
         index1 = 513  # [x]
         # [x]
         output_file_csv = prefix_write + \
@@ -1644,7 +1644,7 @@ class simulation_controller_kagome_part_traps:
         Example:
             import symmetry_transformation_v4_3.simulation_controller as sc
             sct = sc.simulation_controller_kagome_part_traps()
-            prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+            prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
             index1 = 513#[x]
             output_file_csv = prefix_write + 'pin_hex_to_type_8_part_klt_2m_gauss_'+str(int(index1))+'.csv'#[x]
             #sct.generate_simu_index_csv_kagome_part_pin_3_90()
@@ -1714,7 +1714,7 @@ def generate_initial_gsd_hex_and_type_n(type_n, a_particle, n_size, lcr, type_n_
     else:
         print('error: type_n should be an int between [1,11]!')
         print('\n')
-    prefix = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+    prefix = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
     # filename_initial_state should be like
     # 'init_particle_<lattice_type>_<a>_<nx>_<ny>_and_trap_<lattice_type>_<int_lcr>
     # to prevent the mixing of different initial state .gsd file

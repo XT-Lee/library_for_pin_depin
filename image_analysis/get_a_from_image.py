@@ -1,4 +1,4 @@
-import particle_tracking as pt
+import image_analysis.particle_tracking as pt
 import points_analysis_2D_freud as pa
 
 
@@ -16,7 +16,7 @@ class get_a_from_image:
     def __init__(self, filename, silent=False, save_data=False):
         frame = pt.particle_track()
         # parameters remain undefined,,calibration=True
-        frame.single_frame_particle_tracking(filename, 13, 1000)  # , calibration=True
+        frame.single_frame_particle_tracking(filename, 13, 2000, calibration=True)  #
         points = frame.xy
         points[:] = points[:]*3/32  # transform unit from pixel to um
         points[:, 1] = -points[:, 1]  # invert y coordination.
@@ -62,12 +62,23 @@ class show_points_select:
     def __init__(self) -> None:
         pass
 
-    def tune_points(self, points_pix):
-        # parameters remain undefined,,calibration=True
-        points = points_pix[:]-(1024-1)/2  # centralize the points
-        points[:] = points[:]*3/32  # transform unit from pixel to um
-        points[:, 1] = -points[:, 1]  # invert y coordination.
-        return points
+    def tune_pix2um(self, points_pix, xy_or_xx=True):
+        points_um = points_pix[:]-(1024-1)/2  # centralize the points
+        points_um[:] = points_um[:]*3/32  # transform unit from pixel to um
+        if xy_or_xx:
+            points_um[:, 1] = -points_um[:, 1]  # invert y coordination.
+        else:
+            points_um[1] = -points_um[1]
+        return points_um
+
+    def tune_um2pix(self, points_um, xy_or_xx=True):
+        if xy_or_xx:
+            points_um[:, 1] = -points_um[:, 1]  # invert y coordination.
+        else:
+            points_um[1] = -points_um[1]
+        points_pix = points_um*32/3  # transform unit from um to pixel
+        points_pix = points_pix + (1024-1)/2  # uncentralize the points
+        return points_pix
 
     def show_points(self, points, filename, traps=None, silent=False):
         # particle density, averaged bond length
@@ -102,7 +113,7 @@ class show_points_select:
             bpm.plot_traps(traps, mode='array')
         plt.savefig(png_filename2)
 
-    def show_points_finetune(self, points, filename, traps=None, silent=False):
+    def show_points_finetune(self, points, filename, traps=None, silent=False, restrict=None):
         import numpy as np
         # particle density, averaged bond length
         particle_size = 20  # 50
@@ -132,14 +143,15 @@ class show_points_select:
         bpm.restrict_axis_property_relative(hide_axis=True)
         # bpm.plot_scale_bar(-10, -9)
         list_bond_index = bpm.get_bonds_with_conditional_bond_length(
-            result.bond_length, [2, 6.5])  # result.bond_first_minima_left 7.0
+            result.bond_length, [2, result.bond_first_minima_left])  # 7.0
         print(result.bond_first_minima_left)
 
         # p2d.bond_length[:,:2].astype(int)
         bpm.plot_points_with_given_bonds(
             points, list_bond_index, bond_color='k', particle_color='k',
             particle_size=particle_size, bond_width=bond_width)
-        bpm.restrict_axis_limitation([-40, 15], [-35, 20])
+        if not restrict is None:
+            bpm.restrict_axis_limitation(restrict[0], restrict[1])
 
         if not traps is None:
             bpm.plot_traps(traps)  # mode='array'

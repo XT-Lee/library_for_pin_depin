@@ -1,7 +1,7 @@
 def pin_hex_to_hp_csv_cn3():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hp = sc.simulation_controller_honeycomb_part_traps()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
     output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_5973.csv'
     hp.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(output_file_csv)
     import symmetry_transformation_v4_3.list_code_analysis as lca
@@ -13,7 +13,7 @@ def pin_hex_to_hp_fill_workflow():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_honeycomb_part_traps()
     # hpt.generate_simu_index_csv_6373_6612()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
     output_file_csv = prefix_write + 'pin_hex_to_honeycomb_part_klt_2m_gauss_6373_6612.csv'
     hpt.generate_initial_state_hexagonal_particle_honeycomb_part_trap_scan_csv(output_file_csv)
 
@@ -22,7 +22,7 @@ def pin_hex_to_hp_fill_brownian_workflow():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_honeycomb_part_traps()
     hpt.generate_simu_index_csv_lcr081_brownian()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_part_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_part_pin/'
     index1 = 6013
     output_file_csv = prefix_write + \
         'pin_hex_to_honeycomb_part_klt_2m_gauss_b_'+str(int(index1))+'.csv'
@@ -37,7 +37,7 @@ def pin_hex_to_hp_fill_brownian_workflow():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_honeycomb_traps()
     hpt.generate_simu_index_csv_6373()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
     index1 = 6373
     output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_'+str(int(index1))+'.csv'
     hpt.generate_initial_state_hexagonal_particle_honeycomb_trap_scan_csv(output_file_csv)
@@ -48,7 +48,7 @@ def pin_hex_to_hc_fill_workflow_77_84():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_honeycomb_traps()
     # hpt.generate_simu_index_csv_3_242()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/honeycomb_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/honeycomb_pin/'
     output_file_csv = prefix_write + 'pin_hex_to_honeycomb_klt_2m_gauss_3_242.csv'
     hpt.generate_initial_state_hexagonal_particle_honeycomb_trap_scan_csv(output_file_csv)
 
@@ -61,7 +61,7 @@ def pin_hex_to_type_n_part_workflow():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_type_n_part_traps()
     # hpt.generate_simu_index_csv_pin()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
     index1 = 6613
     output_file_csv = prefix_write + 'pin_hex_to_type_n_part_klt_2m_gauss_'+str(int(index1))+'.csv'
     hpt.generate_initial_state_hex_particle_type_n_part_trap_scan_csv(output_file_csv)
@@ -74,7 +74,7 @@ def pin_hex_to_type_4569_part_workflow():
     """
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_type_n_part_traps()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
 
     hpt.generate_simu_index_csv_type_4_pin_3_30()
     index1 = 6963  # 6823#[x]
@@ -116,7 +116,7 @@ def pin_hex_to_type_7_part_workflow():
     import symmetry_transformation_v4_3.simulation_controller as sc
     hpt = sc.simulation_controller_type_n_part_traps()
     hpt.generate_simu_index_csv_type_7_pin_3_30()
-    prefix_write = '/media/remote/32E2D4CCE2D49607/file_lxt/record_results_v430/type_n_pin/'
+    prefix_write = '/home/remote/xiaotian_file/link_to_HDD/record_results_v430/type_n_pin/'
     index1 = 6913  # 6823#[x]
     # [x]
     output_file_csv = prefix_write + 'pin_hex_to_type_7_part_klt_2m_gauss_'+str(int(index1))+'.csv'

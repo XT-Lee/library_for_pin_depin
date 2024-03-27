@@ -44,8 +44,8 @@ class simulation_core_traps:
         self.wca_epsilon = 1.0
 
     def set_file_parameters(self, simu_index, seed):
-        self.prefix_read = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
-        self.prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        self.prefix_read = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
+        self.prefix_write = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         self.seed = seed
         self.simu_index = simu_index
         self.input_file_gsd = self.prefix_read+'particle_and_trap.gsd'
@@ -348,8 +348,8 @@ class simulation_core:
         self.opp_c1 = 100
 
     def set_file_parameters(self, simu_index, seed):
-        self.prefix_read = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
-        self.prefix_write = "/media/remote/32E2D4CCE2D49607/file_lxt/hoomd-examples_1/"
+        self.prefix_read = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
+        self.prefix_write = "/home/remote/xiaotian_file/link_to_HDD/hoomd-examples_1/"
         self.seed = seed
         self.simu_index = simu_index
         self.input_file_gsd = self.prefix_read+'particles.gsd'

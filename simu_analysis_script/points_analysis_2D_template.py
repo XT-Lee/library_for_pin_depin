@@ -1,4 +1,4 @@
-import freud
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.lines as lines
@@ -8,6 +8,151 @@ from scipy.spatial import distance
 import pandas as pd
 import matplotlib
 import os
+
+R"""
+Region to write codes with copilot
+"""
+# start
+
+# read the codes listed in the file
+# use a similar style of codes
+
+
+class dynamic_points_analysis_2d:  # old_class_name: msd
+    R"""
+    Introduction:
+        this class is designed to analyze dynamic properties of a group of paritcle trajectories.
+
+    Methods:
+        msd_module: mean square displacements.
+        displacement_field_module: displacement field.
+
+    example:
+        #final cut bond plot of a simulation
+        import data_analysis_cycle as dac
+        import points_analysis_2D as pa
+        import numpy as np
+        daw = dac.data_analysis_workflow()
+        directory,dataname=daw.gsd_to_txyz(simu_index=5387)
+        txyz = np.load('/home/remote/Downloads/5387_9/txyz.npy')
+        dpa = pa.dynamic_points_analysis_2d(txyz)
+        dpa.plot_bond_neighbor_change_oop(data_name=dataname,prefix=directory,final_cut=True,
+                        trap_filename='/home/remote/hoomd-examples_0/testhoneycomb3-8-12-part1',
+                        trap_lcr=0.816)
+    """
+
+    def __init__(self, txyz_stable, mode='simu'):
+        R"""
+        parameters:
+            txyz_stable:array[Nframes,Nparticles,xyz],
+                for simu data, 
+                    ensure that particles never move across the boundary(box)!
+                for exp data, 
+                    unit of xyz must be um! 
+                    ensure that particles are always in the vision field!
+            #BOX: [lx,ly,lz,xy,xz,yz]
+            account: 'remote' or 'tplab'
+            mode: 'simu' or 'exp'. 'simu' to select particles in box; 'exp' to direct compute msd
+        """
+        if mode == 'simu':
+            # self.box = box
+            # self.__select_stable_trajectories_simu(plot_trajectory)
+            self.txyz_stable = txyz_stable
+            self.x_unit = '($\sigma$)'
+            self.t_unit = '(step)'
+        elif mode == 'exp':
+            self.txyz_stable = txyz_stable
+            self.x_unit = '(um)'
+            self.t_unit = '(s)'
+
+        # self.account = account
+        self.mode = mode
+
+    def get_saturate_time_of_tanh_like_data(self, orderp, threshold=0.95):
+        R"""
+        introduction:
+           the function is written to get the effective evolution time of the order parameter, which ranges from activation to saturation.
+        parameters:
+            orderp: Nframes rows of [order_parameter]
+        """
+        import data_decorate as dd
+        ddr = dd.data_decorator()
+        list_index, data_decorated = ddr.coarse_grainize_and_average_data_log(
+            orderp, coarse_grain_to_n_points=10, navg_odd=5)
+        for i in range(1, np.shape(data_decorated)[0]):
+            if data_decorated[i]/orderp[-1] > threshold:
+                saturate_time = list_index[i]
+                break
+        return saturate_time
+
+
+class covariance_matrix_module:
+    def __init__(self, txy):
+        R"""
+        Introduction:
+            get the covariance matrix of a trajectory.
+        Parameters:
+            txy: whose shape is (Nframes,Nparticles,Ndimensions). here Ndimensions is 2.
+                (x,y) are coordinations of given particles.
+        Returns:
+            tx: whose shape is (Nframes,Nparticles*Ndimensions). Nframes rows of (x0,y0,x1,y1,...,xN,yN).
+        """
+        self.txy = txy
+        if len(np.shape(txy)) != 2:
+            self.tx = self.data_transformation_from_trajectory_to_pca(txy)
+        else:
+            self.tx = txy
+
+    def get_covariance_matrix_of_tx_from_averaged_position(self):
+        R"""
+        Introduction:
+            get the covariance matrix of the array txy.suitable for the oscillation trajectory.
+            if forced to evaluate directional-moving trajectory, it can hardly find the difference
+            between oscillation trajectory and directional-moving trajectory.
+        Parameters:
+            tx: whose shape is (Nframes,Nparticles*Ndimensions). (x,y), coordinations of given particles.
+        Returns:
+            cov: a Nparticles*Ndimension order matrix, the covariance matrix of the tx.
+        """
+        return np.cov(self.tx.T)
+
+    def get_covariance_matrix_of_tx_from_initial_position(self):
+        R"""
+        Introduction:
+            get the covariance matrix of the array txy. suitable for the directional-moving trajectory.
+            if forced to evaluate oscillation trajectory, the result replies on the original position related to the periodicity.
+            eg: originate from center, result is small; originate from the peak, result is large.
+        Parameters:
+            tx: whose shape is (Nframes,Nparticles*Ndimensions). (x,y), coordinations of given particles.
+            txo: tx[:] - tx[0]
+        Returns:
+            cov: a Nparticles*Ndimension order matrix, the covariance matrix of the tx.
+        """
+        txo = self.tx - self.tx[0]
+        # print(f"txo: {txo}\n")
+        # multiply the two matrices txo and txo.T
+        mp = np.matmul(txo.T, txo)
+        # print(f"mp: {mp}\n")
+        mp_averaged = mp/np.shape(txo)[0]
+        return mp_averaged
+
+    def data_transformation_from_trajectory_to_pca(self, txy):
+        R"""
+        Introduction:
+            transform the array txy to a new array with the same shape.
+        Parameters:
+            txy: whose shape is (Nframes,Nparticles,Ndimensions). here Ndimensions is 2.
+                (x,y) are coordinations of given particles.
+        Returns:
+            tx: whose shape is (Nframes,Nparticles*Ndimensions). Nframes rows of (x0,y0,x1,y1,...,xN,yN).
+        """
+        print("txy.shape", txy.shape)
+        tx = np.reshape(txy, (txy.shape[0], -1))
+        print("tx.shape", tx.shape)
+        return tx
+# end
+
+# are there any other libraries to be imported?
 
 
 R"""
@@ -411,8 +556,6 @@ class static_points_analysis_2d:  # old_class_name: PointsAnalysis2D
         if short_ridge_rate < 0.1:  # short ridge must be rare
             self.ridge_first_minima_left = _bins[i]
         else:
-            print('short_ridge_rate is too large!\n')
-            print(short_ridge_rate)
             self.ridge_first_minima_left = _bins[1]
 
         if not png_filename is None:
@@ -463,9 +606,8 @@ class static_points_analysis_2d:  # old_class_name: PointsAnalysis2D
         # record_vertices_cluster: n_vertices rows of [vertex_id, cluster_id],
         # where vertex_id belongs to list_vertices
         # when cluster_id=-1, the vertex has not been included by any cluster.
-        record_vertices_cluster = np.ones((n_vertices, 2), dtype=int)
-        # -1 has been marked as infinity point
-        record_vertices_cluster[:, 1] = -record_vertices_cluster[:, 1]
+        record_vertices_cluster = np.ones((n_vertices, 2))
+        record_vertices_cluster[:] = -record_vertices_cluster[:]
         record_vertices_cluster[:, 0] = list_vertices_index
         cluster_id = 0
         for i in range(n_vertices):
@@ -488,37 +630,16 @@ class static_points_analysis_2d:  # old_class_name: PointsAnalysis2D
                         record_vertices_cluster[:, 1] == contradictory_cluster_id)
                     record_vertices_cluster[list_bool_of_cluster_to_merge, 1] = cluster_id
             cluster_id += 1
-        # remove the infinity points marked -1
-        list_vertices_index_bool = record_vertices_cluster[:, 0] >= 0
-        record_vertices_cluster = record_vertices_cluster[list_vertices_index_bool]
-        n_vertices = np.shape(record_vertices_cluster)[0]
-        # remove end
         # statistics for clusters
         list_cluster_id = np.unique(record_vertices_cluster[:, 1])
         count_polygon = np.zeros((20, 2))  # (10,2)
-        for i in list_cluster_id.astype(int):
+        for i in list_cluster_id:
             list_cluster_i = record_vertices_cluster[record_vertices_cluster[:, 1] == i, 0]
             n_complex_i = np.shape(list_cluster_i)[0]
             count_polygon[n_complex_i, 0] = n_complex_i+2  # [x]frame=1421,polygon=10;1609,12
             count_polygon[n_complex_i, 1] += 1
         count_polygon[1, 0] = 3
-
-        # record triangles in record_vertices_cluster too
-        list_vertices_index_all = np.unique(self.voronoi.ridge_vertices).astype(
-            int)  # truly exist a vertex whose id is -1!
-        list_vertex_tri_bool = list_vertices_index_all[:] >= 0  # remove the infinity vertex
-        list_vertices_index_all = list_vertices_index_all[list_vertex_tri_bool]
-        for vid in record_vertices_cluster[:, 0]:
-            list_vertex_in_cluster_bool = list_vertices_index_all[:] == vid
-            list_vertices_index_all[list_vertex_in_cluster_bool] = -2
-        list_vertex_tri_bool = list_vertices_index_all[:] >= 0
-        list_vertices_index_tri = list_vertices_index_all[list_vertex_tri_bool]
-        n_tris = len(list_vertices_index_tri)
-        # print(n_tris)
-        # list_vertex_clust_bool = list_vertices_index_all[:]<0
-        # list_vertices_index_clust = list_vertices_index_all[list_vertex_clust_bool]
-
-        count_polygon[1, 1] = n_tris  # [x]may be wrong, n_bond != n_simplex
+        count_polygon[1, 1] = np.shape(list_short_bonds)[0]  # [x]may be wrong, n_bond != n_simplex
         # print("polygon_n, count\n",count_polygon)
         #
         count_polygon_relative = np.array(count_polygon)
@@ -533,17 +654,9 @@ class static_points_analysis_2d:  # old_class_name: PointsAnalysis2D
             list_cluster_i = record_vertices_cluster[record_vertices_cluster[:,1]==i,0]
             list_polygon_simplex[]
         """
-        # record triangles in record_vertices_cluster too
-        list_vertices_index_tri_id = range(n_tris)
-        record_vertices_cluster[:, 1] = record_vertices_cluster[:,
-                                                                1]+n_tris  # ensure that ids are not overlapped
-        record_vertices_cluster_new = np.zeros((np.shape(list_vertices_index_all)[0], 2), dtype=int)
-        record_vertices_cluster_new[:n_tris, 0] = list_vertices_index_tri
-        record_vertices_cluster_new[:n_tris, 1] = list_vertices_index_tri_id
-        record_vertices_cluster_new[n_tris:] = record_vertices_cluster
 
         self.vertex_bonds_index = list_short_bonds  # short bonds index offered by ridge comapre method
-        self.list_simplex_cluster = record_vertices_cluster_new
+        self.list_simplex_cluster = record_vertices_cluster
         return count_polygon_relative
 
     def get_conditional_bonds_and_simplices_bond_length(self, bond_first_minima_left=None):
@@ -1233,7 +1346,7 @@ index 10 is out of bounds for axis 0 with size 10
         self.edge_cut_positions_list = np.where(list_xy)
         self.edge_cut_positions_bool = list_xy  # T for body, F for edge.
 
-    def cut_edge_of_positions_by_box(self, points, box):
+    def cut_edge_of_positions_by_box(self, points, box, temp=False):
         R"""
         Variables:
             points:n rows of [x,y]
@@ -1241,7 +1354,6 @@ index 10 is out of bounds for axis 0 with size 10
             inbox_positions_list: self.
             inbox_positions_bool: self.
         """
-
         # sz = len(self.init_positions)#np.size
         # xy = self.init_positions
         xmax = box[0]/2.0
@@ -1258,9 +1370,6 @@ index 10 is out of bounds for axis 0 with size 10
         list_y = np.logical_and(list_ymin, list_ymax)
         list_xy = np.logical_and(list_x, list_y)
 
-        self.inbox_positions_list = np.where(list_xy)
-        self.inbox_positions_bool = list_xy  # T for body, F for edge.
-
         # get the position of vertices of box
         position_box = np.zeros((5, 2))
         position_box[0] = [xmin, ymin]
@@ -1270,40 +1379,11 @@ index 10 is out of bounds for axis 0 with size 10
         position_box[4] = [xmin, ymin]  # back to origin
         self.position_box = position_box
 
-    def get_bond_orientational_order(self, plot=False, png_filename=None, k_set=6):
-        R"""
-        Parameters:
-            k_set: set the k-th disclination order parameter psi_k.
-        """
-        box = np.zeros(2)
-        x1 = min(self.points[:, 0])
-        x2 = max(self.points[:, 0])
-        Lx = x2-x1  # get box size in x-direction
-        y1 = min(self.points[:, 1])
-        y2 = max(self.points[:, 1])
-        Ly = y2-y1  # get box size in y-direction
-        box[0] = Lx+1
-        box[1] = Ly+1
-        hex_order = freud.order.Hexatic(k=k_set)
-
-        sp = np.shape(self.points)
-        pts = np.zeros((sp[0], sp[1]+1))
-        pts[:, 0:2] = self.points[:]
-        hex_order.compute(system=(box, pts[:]))
-
-        self.Psi_k = hex_order.particle_order  # local BOO
-        self.Psi_k_abs = abs(hex_order.particle_order)
-        self.Psi_k_global_with_edge = np.average(self.Psi_k_abs)  # abs checked right
-        self.Psi_k_global_cut_edge = np.average(
-            self.Psi_k_abs[self.edge_cut_positions_list])  # abs checked right
-
-        if plot:
-            plt.figure()
-            plt.scatter(self.points[:, 0], self.points[:, 1], c=self.Psi_k_abs)
-            plt.colorbar()
-            if not png_filename is None:
-                plt.savefig(png_filename)
-            plt.close()
+        if temp:
+            return np.where(list_xy), list_xy
+        else:
+            self.inbox_positions_list = np.where(list_xy)
+            self.inbox_positions_bool = list_xy  # T for body, F for edge.
 
     def get_bond_orientational_order_selected(self, k_set=6, lower_limit=0.9):
         R"""
@@ -1448,13 +1528,13 @@ index 10 is out of bounds for axis 0 with size 10
         trap_filename="/home/tplab/hoomd-examples_0/testhoneycomb3-8-12-part1"
         """
         self.draw_bonds = bond_plot_module()
-        self.draw_bonds.restrict_axis_property_relative(x_unit=x_unit)  # self.points,
+        self.draw_bonds.restrict_axis_property_relative(self.points, x_unit=x_unit)
         if not axis_limit is None:
             xlim = [-axis_limit[0], axis_limit[0]]  # [0,axis_limit[0]]
             ylim = [-axis_limit[1], axis_limit[1]]  # [0,axis_limit[1]]
             self.draw_bonds.restrict_axis_limitation(xlim, ylim)
-        # draw_points_with_conditional_bond(self.points,self.bond_length,bond_length_limmit=check)
-        self.draw_bonds.plot_points_with_given_bonds()
+        self.draw_bonds.draw_points_with_conditional_bond(
+            self.points, self.bond_length, bond_length_limmit=check)
         # self.draw_bonds.draw_bonds_conditional_bond(self.points,self.bond_length,bond_length_limmit=check,x_unit=x_unit)
         if not trap_filename is None:
             self.draw_bonds.plot_traps(trap_filename=trap_filename,
@@ -2275,7 +2355,7 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
         a_frame.get_first_minima_bond_length_distribution(
             lattice_constant=1, hist_cutoff=bond_cut_off)  # ,png_filename=png_filename1
         check = [0.4, a_frame.bond_first_minima_left]
-        bpm.plot_points_with_given_bonds(
+        bpm.draw_points_with_given_bonds(
             xy_init, a_frame.bond_length, check, particle_size=particle_size)
         # draw arrows
         df2 = displacemnt_field_2D(self.txyz_stable, bpm.ax, bpm.fig)
@@ -2332,7 +2412,7 @@ class dynamic_points_analysis_2d:  # old_class_name: msd
         a_frame.get_first_minima_bond_length_distribution(
             lattice_constant=1, hist_cutoff=bond_cut_off)  # ,png_filename=png_filename1
         check = [0.4, a_frame.bond_first_minima_left]
-        bpm.plot_points_with_given_bonds(
+        bpm.draw_points_with_given_bonds(
             xy_init, a_frame.bond_length, check, particle_size=particle_size)
         # draw arrows
         df2 = displacemnt_field_2D(self.txyz_stable, bpm.ax, bpm.fig)
@@ -2495,7 +2575,7 @@ class trajectory_module:
         """
         cp = 'r'  # color_pin
         ci = 'darkorange'  # color_interstitial
-        import points_analysis_2D_freud as pa
+        import points_analysis_2D as pa
         # prefix = '/home/remote/Downloads/4302_9/'
         filename_txyz_stable = prefix+'txyz_stable.npy'
         txyz_stable = np.load(filename_txyz_stable)
@@ -2596,7 +2676,7 @@ class trajectory_module:
             for the same particle id, dr(df) = r(frame+df)-r(frame),
             method2: average 3 frames of positions and draw the trajectory
         """
-        import points_analysis_2D_freud as pa
+        import points_analysis_2D as pa
         prefix = '/home/remote/Downloads/4302_9/'
         filename_txyz_stable = prefix+'txyz_stable.npy'
         txyz_stable = np.load(filename_txyz_stable)
@@ -3561,21 +3641,7 @@ class bond_plot_module:
         self.ax.set_xlim(xlim[0], xlim[1])
         self.ax.set_ylim(ylim[0], ylim[1])
 
-    def plot_scale_bar(self, tx=-24.5, ty=12, bar_span=5):
-        tstring = str(bar_span)+' $\mu$m'
-        zi = 2
-        self.ax.text(tx, ty, tstring, horizontalalignment='center', zorder=zi)
-        down_shift = 0.2
-        bar_height = 1
-        lx = [tx-0.5*bar_span, tx+0.5*bar_span]
-        ly = [ty-down_shift-bar_height, ty-down_shift]
-        # ax.plot(lx,ly,c='k',linewidth=4,zorder=zi)
-        list_points_xy = np.array([[lx[0], ly[0]], [lx[1], ly[0]], [
-                                  lx[1], ly[1]], [lx[0], ly[1]], [lx[0], ly[0]]])
-        self.ax.fill(list_points_xy[:, 0], list_points_xy[:, 1],
-                     facecolor='k', edgecolor='k', linewidth=0.01)
-
-    def plot_points_with_given_bonds(
+    def draw_points_with_given_bonds(
             self, xy, list_bonds_index=None, particle_size=None, bond_color='b', particle_color='k',
             bond_width=None):
         R"""
@@ -3613,8 +3679,7 @@ class bond_plot_module:
             reserve long ridges(local short bonds) to show polygons formed by particles. 
         """
         list_short_ridge_bool = ridge_length[:] <= ridge_first_minima_left
-        list_long_ridge_bool = np.logical_not(list_short_ridge_bool)
-        list_bond_index = ridge_points[list_long_ridge_bool]
+        list_bond_index = ridge_points[np.logical_not(list_short_ridge_bool)]
         return list_bond_index
 
     def get_bonds_with_conditional_bond_length(self, bond_length, bond_length_limmit=[0.9, 2.0]):
@@ -3741,8 +3806,7 @@ class bond_plot_module:
         if latex is used in matplolib,
         'pip install latex' is necessary for plt.savefig()
         """
-        self.fig.savefig(png_filename, bbox_inches='tight',
-                         pad_inches=0)  # plt.savefig(png_filename)
+        self.fig.savefig(png_filename, bbox_inches='tight')  # plt.savefig(png_filename)
         plt.close('all')  # self.fig,plt.close() # closes the current active figure
 
 
@@ -3752,34 +3816,7 @@ class bond_plot_module_for_image:
 
         self.ax.imshow(image, zorder=-1)
 
-    def restrict_axis_property_relative(self, x_unit=None, hide_axis=False):  # ,xy
-        R"""
-        Parameters:
-            x_unit: '($/sigma$)','(um)'
-            txyz: all the particle positions, no one removed.
-            bond_length: [particle_id1,particle_id2, bond_length] for txyz.
-            check: limit the shortest and longest bond( in bond_length) to draw.
-            png_filename: "prefix/bond_plot_index1513.png"
-        weight of shapes:
-            bond(blue line) < particles(black circle) < neighbor_change(orange circle) < traps(red cross)
-            0   1   2   3   
-        """
-
-        # draw a figure with edges
-        if not x_unit is None:
-            self.ax.set_xlabel('x'+x_unit)  # Add an x-label to the axes.
-            self.ax.set_ylabel('y'+x_unit)  # Add a y-label to the axes.
-            self.ax.set_title("bond_length: vertices"+x_unit)  # Add a title to the axes
-        self.ax.set_aspect('equal', 'box')  # plt.axis('equal')
-        if hide_axis:
-            # hide xy-axis
-            self.ax.set_xticks([])
-            self.ax.set_yticks([])
-
-        # restrict data region to show
-        self.x_unit = x_unit
-
-    def restrict_axis_property_relative_x(self, xy, x_unit='(um)'):
+    def restrict_axis_property_relative(self, xy, x_unit='(um)'):
         R"""
         Parameters:
             txyz: all the particle positions, no one removed.
@@ -3844,21 +3881,6 @@ class bond_plot_module_for_image:
         # restrict data region to show
         self.ax.set_xlim(xlim[0], xlim[1])
         self.ax.set_ylim(ylim[0], ylim[1])
-
-    def plot_scale_bar(self, tx=-24.5, ty=12, bar_span_um=5):
-        tstring = str(bar_span_um)+' $\mu$m'
-        zi = 2
-        self.ax.text(tx, ty, tstring, horizontalalignment='center', zorder=zi, color='w')
-        down_shift = -8
-        bar_height = 1
-        bar_span_pix = bar_span_um*32/3
-        lx = [tx-0.5*bar_span_pix, tx+0.5*bar_span_pix]
-        ly = [ty-down_shift-bar_height, ty-down_shift]
-        # ax.plot(lx,ly,c='k',linewidth=4,zorder=zi)
-        list_points_xy = np.array([[lx[0], ly[0]], [lx[1], ly[0]], [
-                                  lx[1], ly[1]], [lx[0], ly[1]], [lx[0], ly[0]]])
-        self.ax.fill(list_points_xy[:, 0], list_points_xy[:, 1],
-                     facecolor='w', edgecolor='w', linewidth=2)
 
     def draw_points_with_conditional_bond(
             self, xy, bond_length=None, bond_length_limmit=[0.9, 2.0],
@@ -3982,9 +4004,9 @@ class bond_plot_module_for_image:
         if latex is used in matplolib,
         'pip install latex' is necessary for plt.savefig()
         """
-        self.fig.savefig(png_filename, bbox_inches='tight',
-                         pad_inches=0)  # plt.savefig(png_filename)
-        plt.close('all')
+        self.fig.savefig(png_filename)  # plt.savefig(png_filename)
+        plt.close()  # closes the current active figure
+        # del self.ax,self.fig
 
     # compatible module
     def draw_bonds_conditional_bond(
@@ -5192,11 +5214,11 @@ class energy_computer:
         # load time steps
         if seed is None:
             str_index = str(int(simu_index))
-            gsd_data = pf.proceed_gsd_file(simu_index=simu_index)
+            gsd_data = pf.processor_gsd_file(simu_index=simu_index)
         else:
             str_index = str(int(simu_index))+'_'+str(seed)
             file_gsd = log_prefix+'trajectory_auto'+str_index+'.gsd'  # +'_'+str(seed)
-            gsd_data = pf.proceed_gsd_file(filename_gsd_seed=file_gsd, account=account)
+            gsd_data = pf.processor_gsd_file(filename_gsd_seed=file_gsd, account=account)
 
         file_log = log_prefix+'log-output_auto'+str_index+'.log'  # +'_'+str(seed)
         log_data = np.genfromtxt(fname=file_log, skip_header=True)
