@@ -240,7 +240,7 @@ class archimedean_tilings:
         """
         self.position = np.array([[1, rt, 0],
                                   [0, rt, 0], [0.5, 0.5*rt, 0],
-                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a
+                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a 
 
     def generate_type9_part(self, a=1):
         R"""
@@ -393,6 +393,74 @@ class archimedean_tilings:
                                   [2, rt, 0], [3, rt, 0], [4, rt, 0]])*a
         """
         self.position = np.array([[1, rt, 0],
+
+                                  [1, 0, 0],
+
+
+                                  [2.5, 0.5*rt, 0], [3, 0, 0],
+                                  [2.5, -0.5*rt, 0],          [4.5, -0.5*rt, 0],
+
+
+                                  [-0.5, 2.5*rt, 0], [0, 2*rt, 0],
+                                  [-0.5, 1.5*rt, 0],          [1.5, 1.5*rt, 0],
+
+                                  [3, 2*rt, 0],
+
+                                  [3, rt, 0]])*a
+
+    def generate_type9_part_superlattice_center_fill(self, a=1):
+        R"""
+        Introduction:
+            (3,4,6,4) triangles, squares and hexagons.
+            a: the edge length of a single tile.
+            n: n*n lattices to generate. 
+        example:
+            import workflow_analysis as wa
+            import matplotlib.pyplot as plt
+            at = wa.archimedean_tilings()
+            at.generate_type11(2)
+            points = at.generate_lattices([12,3])
+            fig,ax = plt.subplots()
+            ax.scatter(points[:,0],points[:,1])
+            ax.set_xlabel('x label')  # Add an x-label to the axes.
+            ax.set_ylabel('y label')  # Add a y-label to the axes.
+            ax.set_title("Simple Plot")  # Add a title to the axes
+            ax.set_aspect('equal','box')
+            plt.show()
+        source:
+            def generate_honeycomb(self,a,n):
+            uc = hoomd.lattice.unitcell(N=4,
+                                    a1=[3*a, 0, 0],
+                                    a2=[0, math.sqrt(3)*a, 0],
+                                    a3=[0, 0, 1],
+                                    dimensions=2,
+                                    position=[[0,0,0], [1/2*a, math.sqrt(3)/2*a, 0],[3/2*a,math.sqrt(3)/2*a,0],[2*a,0,0]],
+                                    type_name=['A', 'A','A','A'],
+                                    diameter=[1,1,1,1]);
+            self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
+        """
+        rt = RT
+        # N=16
+        self.a1 = np.array([5, -rt, 0])*a  # 1+rt
+        self.a2 = np.array([-1, 3*rt, 0])*a
+        self.a3 = np.array([0, 0, 0])
+        # dimensions=2
+        """
+        self.position = np.array([[1, rt, 0],
+                                  [0, rt, 0], [0.5, 0.5*rt, 0],
+                                  [0, 0, 0], [1, 0, 0], [2, 0, 0],
+                                  [3.5, 0.5*rt, 0],
+                                  [2.5, 0.5*rt, 0], [3, 0, 0],
+                                  [2.5, -0.5*rt, 0], [3.5, -0.5*rt, 0], [4.5, -0.5*rt, 0],
+                                  [0.5, 2.5*rt, 0],
+                                  [-0.5, 2.5*rt, 0], [0, 2*rt, 0],
+                                  [-0.5, 1.5*rt, 0], [0.5, 1.5*rt, 0], [1.5, 1.5*rt, 0],
+                                  [3, 2*rt, 0],
+                                  [2, 2*rt, 0], [2.5, 1.5*rt, 0],
+                                  [2, rt, 0], [3, rt, 0], [4, rt, 0]])*a
+        """
+        self.position = np.array([[1.5,0.5*rt,0],[4, 0, 0],[1, 2*rt, 0],[3.5, 1.5*rt, 0],
+                                  [1, rt, 0],
 
                                   [1, 0, 0],
 
@@ -691,6 +759,62 @@ class archimedean_tilings:
                                   [1+rt, 1, 0], [1+2*rt, 1, 0],
                                   [0, 0, 0], [rt, 0, 0],])*a
 
+    def generate_type7_part_superlattice_center_fill(self,a=1):
+        R"""
+        Introduction:
+            (3,4,6,4) triangles, squares and hexagons.
+            a: the edge length of a single tile.
+            n: n*n lattices to generate. 
+        example:
+            import workflow_analysis as wa
+            import matplotlib.pyplot as plt
+            at = wa.archimedean_tilings()
+            at.generate_type11(2)
+            points = at.generate_lattices([12,3])
+            fig,ax = plt.subplots()
+            ax.scatter(points[:,0],points[:,1])
+            ax.set_xlabel('x label')  # Add an x-label to the axes.
+            ax.set_ylabel('y label')  # Add a y-label to the axes.
+            ax.set_title("Simple Plot")  # Add a title to the axes
+            ax.set_aspect('equal','box')
+            plt.show()
+        source:
+            def generate_honeycomb(self,a,n):
+            uc = hoomd.lattice.unitcell(N=4,
+                                    a1=[3*a, 0, 0],
+                                    a2=[0, math.sqrt(3)*a, 0],
+                                    a3=[0, 0, 1],
+                                    dimensions=2,
+                                    position=[[0,0,0], [1/2*a, math.sqrt(3)/2*a, 0],[3/2*a,math.sqrt(3)/2*a,0],[2*a,0,0]],
+                                    type_name=['A', 'A','A','A'],
+                                    diameter=[1,1,1,1]);
+            self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
+        """
+        rt = RT
+        #N=16
+        self.a1 = np.array([2+2*rt,0,0])*a#1+rt
+        self.a2 = np.array([-1-rt,3+rt,0])*a#[-0.5-0.5*rt,  1.5+0.5*rt, [0.5+0.5*rt,  1.5+0.5*rt]
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
+        """
+        self.position = np.array([[-1-0.5*rt,2.5+rt,0],[-0.5,3+0.5*rt,0],                   [0.5*rt,2.5+rt,0],[0.5+rt,3+0.5*rt,0],
+                                  [-0.5-0.5*rt,2.5+0.5*rt,0],[-0.5+0.5*rt,2.5+0.5*rt,0],    [0.5+0.5*rt,2.5+0.5*rt,0],[0.5+1.5*rt,2.5+0.5*rt,0],
+                                  [-0.5-0.5*rt,1.5+0.5*rt,0],[-0.5+0.5*rt,1.5+0.5*rt,0],    [0.5+0.5*rt,1.5+0.5*rt,0],[0.5+1.5*rt,1.5+0.5*rt,0],
+
+                                  [-0.5,1+0.5*rt,0],[0.5*rt,1.5,0], [0.5+rt,1+0.5*rt,0],[1+1.5*rt,1.5,0],
+                                  [0,1,0],[rt,1,0],                 [1+rt,1,0],[1+2*rt,1,0],
+                                  [0,0,0],[rt,0,0],                 [1+rt,0,0],[1+2*rt,0,0]
+                                              ])*a
+        """
+        self.position = np.array([[0.5*rt,0.5,0],[1+1.5*rt,0.5,0],[-0.5,2+0.5*rt,0],[0.5+rt,2+0.5*rt,0],
+                                                     [-0.5,3+0.5*rt,0],                   [0.5*rt,2.5+rt,0],
+                                                                                            [0.5+0.5*rt,2.5+0.5*rt,0],[0.5+1.5*rt,2.5+0.5*rt,0],
+                                  [-0.5-0.5*rt,1.5+0.5*rt,0],[-0.5+0.5*rt,1.5+0.5*rt,0],    
+
+                                                    [0.5*rt,1.5,0], [0.5+rt,1+0.5*rt,0],
+                                                                    [1+rt,1,0],[1+2*rt,1,0],
+                                  [0,0,0],[rt,0,0],                                                 ])*a
+
     def generate_type6(self, a=1):
         R"""
         Introduction:
@@ -880,6 +1004,55 @@ class archimedean_tilings:
              [0.5 * rt, 0, 0],
              [2 + 1.5 * rt, 0, 0]]) * a
 
+    def generate_type6_part_superlattice_center_fill(self,a=1):
+        R"""
+        Introduction:
+            (4,8^2) squares and octagons.
+            a: the edge length of a single tile.
+            n: n*n lattices to generate. 
+        example:
+            import workflow_analysis as wa
+            import matplotlib.pyplot as plt
+            at = wa.archimedean_tilings()
+            at.generate_type11(2)
+            points = at.generate_lattices([12,3])
+            fig,ax = plt.subplots()
+            ax.scatter(points[:,0],points[:,1])
+            ax.set_xlabel('x label')  # Add an x-label to the axes.
+            ax.set_ylabel('y label')  # Add a y-label to the axes.
+            ax.set_title("Simple Plot")  # Add a title to the axes
+            ax.set_aspect('equal','box')
+            plt.show()
+        source:
+            def generate_honeycomb(self,a,n):
+            uc = hoomd.lattice.unitcell(N=4,
+                                    a1=[3*a, 0, 0],
+                                    a2=[0, math.sqrt(3)*a, 0],
+                                    a3=[0, 0, 1],
+                                    dimensions=2,
+                                    position=[[0,0,0], [1/2*a, math.sqrt(3)/2*a, 0],[3/2*a,math.sqrt(3)/2*a,0],[2*a,0,0]],
+                                    type_name=['A', 'A','A','A'],
+                                    diameter=[1,1,1,1]);
+            self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
+        """
+        rt = math.sqrt(2)
+        #N=12
+        self.a1 = np.array([2+2*rt,0,0])*a
+        self.a2 = np.array([0,2+2*rt,0])*a
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
+        """#raw 2*2 superlattice
+        self.position = np.array([[0,1+1.5*rt,0],[0,2+1.5*rt,0],      [1+rt,1+1.5*rt,0],[1+rt,2+1.5*rt,0],
+                                  [0.5*rt,1+rt,0],[1+0.5*rt,1+rt,0],  [1+1.5*rt,1+rt,0],[2+1.5*rt,1+rt,0],
+                                  [0,0.5*rt,0],[0,1+0.5*rt,0],        [1+rt,0.5*rt,0],[1+rt,1+0.5*rt,0],
+                                  [0.5*rt,0,0],[1+0.5*rt,0,0],        [1+1.5*rt,0,0],[2+1.5*rt,0,0] ])*a
+        """
+        self.position = np.array([[0.5+0.5*rt,0.5+0.5*rt,0],[1.5+1.5*rt,0.5+0.5*rt,0],[0.5+0.5*rt,1.5+1.5*rt,0],[1.5+1.5*rt,1.5+1.5*rt,0],
+                                  [0,1+1.5*rt,0],                                      [1+rt,2+1.5*rt,0],
+                                                 [1+0.5*rt,1+rt,0],  [1+1.5*rt,1+rt,0],
+                                                  [0,1+0.5*rt,0],        [1+rt,0.5*rt,0], 
+                                  [0.5*rt,0,0],                                         [2+1.5*rt,0,0] ])*a
+    
     def generate_type5(self, a=1):
         R"""
         Introduction:
@@ -968,6 +1141,51 @@ class archimedean_tilings:
                                   [-0.5, 0.5*rt, 0], [1.5+rt, 0.5*rt, 0],
                                   [0, 0, 0], [1+rt, 0, 0]])*a
 
+    def generate_type5_part_center_fill(self,a=1):
+        R"""
+        Introduction:
+            (4,6,12) squares, hexagons and dodecagons.
+            a: the edge length of a single tile.
+            n: n*n lattices to generate. 
+        example:
+            import workflow_analysis as wa
+            import matplotlib.pyplot as plt
+            at = wa.archimedean_tilings()
+            at.generate_type11(2)
+            points = at.generate_lattices([12,3])
+            fig,ax = plt.subplots()
+            ax.scatter(points[:,0],points[:,1])
+            ax.set_xlabel('x label')  # Add an x-label to the axes.
+            ax.set_ylabel('y label')  # Add a y-label to the axes.
+            ax.set_title("Simple Plot")  # Add a title to the axes
+            ax.set_aspect('equal','box')
+            plt.show()
+        source:
+            def generate_honeycomb(self,a,n):
+            uc = hoomd.lattice.unitcell(N=4,
+                                    a1=[3*a, 0, 0],
+                                    a2=[0, math.sqrt(3)*a, 0],
+                                    a3=[0, 0, 1],
+                                    dimensions=2,
+                                    position=[[0,0,0], [1/2*a, math.sqrt(3)/2*a, 0],[3/2*a,math.sqrt(3)/2*a,0],[2*a,0,0]],
+                                    type_name=['A', 'A','A','A'],
+                                    diameter=[1,1,1,1]);
+            self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
+        """
+        rt = RT
+        #N=12
+        self.a1 = np.array([3+rt,0,0])*a
+        self.a2 = np.array([-1.5-0.5*rt,1.5+1.5*rt,0])*a#(rt+3)*0.5
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
+        self.position = np.array([[-1.5,1+1.5*rt,0],
+                                  [0.5*rt,1.5+rt,0],[1+0.5*rt,1.5+rt,0],
+                                  [0,1+rt,0],[1+rt,1+rt,0],
+                                  [-0.5,1+0.5*rt,0],[1.5+rt,1+0.5*rt,0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
+                                  [-0.5,0.5*rt,0],[1.5+rt,0.5*rt,0],   
+                                  [0,0,0],[1+rt,0,0]])*a
+    
     def generate_type4(self, a=1):
         R"""
         Introduction:
@@ -1049,6 +1267,48 @@ class archimedean_tilings:
         # dimensions=2
         self.position = np.array([[-1, 1+rt, 0],
                                   [-0.5, 1+0.5*rt, 0],
+                                  [0, 0, 0], [1+rt, 0, 0]])*a
+
+    def generate_type4_part_center_fill(self, a=1):
+        R"""
+        Introduction:
+            (3,12^2) triangles and dodecagons.
+            a: the edge length of a single tile.
+            n: n*n lattices to generate. 
+        example:
+            import workflow_analysis as wa
+            import matplotlib.pyplot as plt
+            at = wa.archimedean_tilings()
+            at.generate_type11(2)
+            points = at.generate_lattices([12,3])
+            fig,ax = plt.subplots()
+            ax.scatter(points[:,0],points[:,1])
+            ax.set_xlabel('x label')  # Add an x-label to the axes.
+            ax.set_ylabel('y label')  # Add a y-label to the axes.
+            ax.set_title("Simple Plot")  # Add a title to the axes
+            ax.set_aspect('equal','box')
+            plt.show()
+        source:
+            def generate_honeycomb(self,a,n):
+            uc = hoomd.lattice.unitcell(N=4,
+                                    a1=[3*a, 0, 0],
+                                    a2=[0, math.sqrt(3)*a, 0],
+                                    a3=[0, 0, 1],
+                                    dimensions=2,
+                                    position=[[0,0,0], [1/2*a, math.sqrt(3)/2*a, 0],[3/2*a,math.sqrt(3)/2*a,0],[2*a,0,0]],
+                                    type_name=['A', 'A','A','A'],
+                                    diameter=[1,1,1,1]);
+            self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
+        """
+        rt = RT
+        # N=5
+        self.a1 = np.array([2+rt, 0, 0])*a
+        self.a2 = np.array([-1-0.5*rt, 1.5+rt, 0])*a  # (rt+3)*0.5
+        self.a3 = np.array([0, 0, 0])
+        # dimensions=2
+        self.position = np.array([[-1, 1+rt, 0],
+                                  [-0.5, 1+0.5*rt, 0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
                                   [0, 0, 0], [1+rt, 0, 0]])*a
 
     def generate_type3(self, a=1):
@@ -1231,6 +1491,17 @@ class archimedean_tilings:
             self.generate_type7_superlattice(a)
         elif (type_n) == 92:
             self.generate_type9_superlattice(a)
+        elif (type_n) == 43:
+            self.generate_type4(a)
+        elif (type_n) == 53:
+            self.generate_type5(a)
+        elif (type_n) == 63:
+            self.generate_type6_superlattice(a)
+        elif (type_n) == 73:
+            self.generate_type7_superlattice(a)
+        elif (type_n) == 93:
+            self.generate_type9_superlattice(a)
+
 
     def generate_type_n_part(self, type_n, a=1):
         if (type_n) == 1:
@@ -1261,6 +1532,16 @@ class archimedean_tilings:
             self.generate_type7_part_superlattice(a)
         elif (type_n) == 92:
             self.generate_type9_part_superlattice(a)
+        elif (type_n) == 43:
+            self.generate_type4_part_center_fill(a)
+        elif (type_n) == 53:
+            self.generate_type5_part_center_fill(a)
+        elif (type_n) == 63:
+            self.generate_type6_part_superlattice_center_fill(a)
+        elif (type_n) == 73:
+            self.generate_type7_part_superlattice_center_fill(a)
+        elif (type_n) == 93:
+            self.generate_type9_part_superlattice_center_fill(a)
 
     def generate_lattices(self, n):
         R"""
