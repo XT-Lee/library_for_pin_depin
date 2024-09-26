@@ -240,7 +240,7 @@ class archimedean_tilings:
         """
         self.position = np.array([[0, rt, 0], [1, rt, 0],
                                   [0.5, 0.5*rt, 0],
-                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a
+                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a 
 
     def generate_type9_rect(self, a=1):
         R"""
@@ -273,21 +273,20 @@ class archimedean_tilings:
                                     diameter=[1,1,1,1]);
             self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
         """
-        # generate_type9, superlattice, to match rectangle condition
-        # as test, type9_(4, 6) when rectangled by diagonal, is of periodicity.
+        #generate_type9, superlattice, to match rectangle condition
+        #as test, type9_(4, 6) when rectangled by diagonal, is of periodicity.
         self.generate_type9(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # *4
-        self.a2 = self.a2*6  # *6
+        self.a2 = self.a2*6 # *6
         self.a3 = self.a3
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -332,9 +331,9 @@ class archimedean_tilings:
         self.a3 = np.array([0, 0, 0])
         # dimensions=2
         self.position = np.array([[0, rt, 0], [1, rt, 0],
-                                  [0.5, 0.5*rt, 0],     [1.5, 0.5*rt, 0],
-                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a
-
+                                  [0.5, 0.5*rt, 0],     [1.5,0.5*rt,0],
+                                  [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a 
+        
     def generate_type9_part(self, a=1):
         R"""
         Introduction:
@@ -370,8 +369,8 @@ class archimedean_tilings:
                                   [0.5,0.5*rt,0],[2.5,0.5*rt,0],
                                   [0,0,0],[1,0,0],[2,0,0]])*a
         """
-        self.position = np.array([[0, rt, 0], [1, rt, 0],
-
+        self.position = np.array([[0, rt, 0],[1, rt, 0],
+                                  
                                   [0, 0, 0], [1, 0, 0], [2, 0, 0]])*a
 
     def generate_type9_part_rect(self, a=1):
@@ -405,21 +404,20 @@ class archimedean_tilings:
                                     diameter=[1,1,1,1]);
             self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
         """
-        # generate_type9, superlattice, to match rectangle condition
-        # as test, type9_(4, 6) when rectangled by diagonal, is of periodicity.
+        #generate_type9, superlattice, to match rectangle condition
+        #as test, type9_(4, 6) when rectangled by diagonal, is of periodicity.
         self.generate_type9_part(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # *4
-        self.a2 = self.a2*6  # *6
+        self.a2 = self.a2*6 # *6
         self.a3 = self.a3
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -473,8 +471,8 @@ class archimedean_tilings:
         pos_top_rt = self.position+self.a1*0.5+self.a2*0.5
         self.position = np.concatenate((self.position, pos_rt, pos_lf, pos_top_rt), axis=0)
         """
-        self.position = np.array([[0, rt, 0], [1, rt, 0],
-                                  [0.5, 0.5*rt, 0],
+        self.position = np.array([[0, rt, 0],[1, rt, 0],
+                                   [0.5, 0.5*rt, 0],
                                   [0, 0, 0], [1, 0, 0], [2, 0, 0],
 
                                   [2.5, 0.5*rt, 0], [3.5, 0.5*rt, 0],
@@ -523,18 +521,17 @@ class archimedean_tilings:
         rt = RT
         # N=12
         self.generate_type9_superlattice(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # 1+rt
         self.a2 = self.a2*6
         self.a3 = self.a3*1
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -588,10 +585,10 @@ class archimedean_tilings:
         pos_top_rt = self.position+self.a1*0.5+self.a2*0.5
         self.position = np.concatenate((self.position, pos_rt, pos_lf, pos_top_rt), axis=0)
         """
-        self.position = np.array([[1.5, 0.5*rt, 0], [4, 0, 0], [1, 2*rt, 0], [3.5, 1.5*rt, 0],
-
-                                  [0, rt, 0], [1, rt, 0],
-                                  [0.5, 0.5*rt, 0],
+        self.position = np.array([[1.5,0.5*rt,0],[4, 0, 0],[1, 2*rt, 0],[3.5, 1.5*rt, 0],
+                                  
+                                  [0, rt, 0],[1, rt, 0],
+                                   [0.5, 0.5*rt, 0],
                                   [0, 0, 0], [1, 0, 0], [2, 0, 0],
 
                                   [2.5, 0.5*rt, 0], [3.5, 0.5*rt, 0],
@@ -640,18 +637,17 @@ class archimedean_tilings:
         rt = RT
         # N=12
         self.generate_type9_superlattice_center_fill(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # 1+rt
         self.a2 = self.a2*6
         self.a3 = self.a3*1
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -709,21 +705,21 @@ class archimedean_tilings:
                                   [2, 2*rt, 0], [2.5, 1.5*rt, 0],
                                   [2, rt, 0], [3, rt, 0], [4, rt, 0]])*a
         """
-        self.position = np.array([[1, rt, 0],
+        self.position = np.array([          [1, rt, 0],
 
-                                  [1, 0, 0],
+                                            [1, 0, 0],
 
-                                  [2.5, 0.5*rt, 0],
+                                  [2.5, 0.5*rt, 0], 
                                   [3, 0, 0],
                                   [2.5, -0.5*rt, 0],          [4.5, -0.5*rt, 0],
 
-                                  [-0.5, 2.5*rt, 0],
+                                  [-0.5, 2.5*rt, 0], 
                                   [0, 2*rt, 0],
                                   [-0.5, 1.5*rt, 0],          [1.5, 1.5*rt, 0],
 
-                                  [3, 2*rt, 0],
+                                            [3, 2*rt, 0],
 
-                                  [3, rt, 0]])*a
+                                            [3, rt, 0]])*a
 
     def generate_type9_part_superlattice_rect(self, a=1):
         R"""
@@ -759,18 +755,17 @@ class archimedean_tilings:
         rt = RT
         # N=12
         self.generate_type9_part_superlattice(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # 1+rt
         self.a2 = self.a2*6
         self.a3 = self.a3*1
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -828,8 +823,8 @@ class archimedean_tilings:
                                   [2, 2*rt, 0], [2.5, 1.5*rt, 0],
                                   [2, rt, 0], [3, rt, 0], [4, rt, 0]])*a
         """
-        self.position = np.array([[1.5, 0.5*rt, 0], [4, 0, 0], [1, 2*rt, 0], [3.5, 1.5*rt, 0],
-
+        self.position = np.array([[1.5,0.5*rt,0],[4, 0, 0],[1, 2*rt, 0],[3.5, 1.5*rt, 0],
+        
                                   [1, rt, 0],
 
                                   [1, 0, 0],
@@ -880,18 +875,17 @@ class archimedean_tilings:
         rt = RT
         # N=12
         self.generate_type9_part_superlattice_center_fill(a)
-        positions = self.generate_lattices_not_centralized([4, 6])
-        pd = pa.static_points_analysis_2d(positions, hide_figure=True)
+        positions = self.generate_lattices_not_centralized([4,6])
+        pd = pa.static_points_analysis_2d(positions,hide_figure=True)
 
         self.a1 = self.a1*4  # 1+rt
         self.a2 = self.a2*6
         self.a3 = self.a3*1
 
         vec = self.a1+self.a2+self.a3
-        box = [2*vec[0], 2*vec[1], 0, 0, 0, 0]
-        # cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
-        pd.cut_edge_of_positions_by_box(positions, box)
-        self.position = positions[pd.inbox_positions_bool]  # edge_cut_positions_bool
+        box = [2*vec[0],2*vec[1],0,0,0,0]
+        pd.cut_edge_of_positions_by_box(positions,box)#cut_edge_of_positions_by_xylimit(-0.5*bx[0],0.5*bx[0],-0.5*bx[1],0.5*bx[1])
+        self.position = positions[pd.inbox_positions_bool]#edge_cut_positions_bool
         del pd
 
         self.a1 = np.array([vec[0], 0, 0])
@@ -1181,7 +1175,7 @@ class archimedean_tilings:
                                   [1+rt, 1, 0], [1+2*rt, 1, 0],
                                   [0, 0, 0], [rt, 0, 0],])*a
 
-    def generate_type7_part_superlattice_center_fill(self, a=1):
+    def generate_type7_part_superlattice_center_fill(self,a=1):
         R"""
         Introduction:
             (3,4,6,4) triangles, squares and hexagons.
@@ -1213,12 +1207,11 @@ class archimedean_tilings:
             self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
         """
         rt = RT
-        # N=16
-        self.a1 = np.array([2+2*rt, 0, 0])*a  # 1+rt
-        # [-0.5-0.5*rt,  1.5+0.5*rt, [0.5+0.5*rt,  1.5+0.5*rt]
-        self.a2 = np.array([-1-rt, 3+rt, 0])*a
-        self.a3 = np.array([0, 0, 0])
-        # dimensions=2
+        #N=16
+        self.a1 = np.array([2+2*rt,0,0])*a#1+rt
+        self.a2 = np.array([-1-rt,3+rt,0])*a#[-0.5-0.5*rt,  1.5+0.5*rt, [0.5+0.5*rt,  1.5+0.5*rt]
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
         """
         self.position = np.array([[-1-0.5*rt,2.5+rt,0],[-0.5,3+0.5*rt,0],                   [0.5*rt,2.5+rt,0],[0.5+rt,3+0.5*rt,0],
                                   [-0.5-0.5*rt,2.5+0.5*rt,0],[-0.5+0.5*rt,2.5+0.5*rt,0],    [0.5+0.5*rt,2.5+0.5*rt,0],[0.5+1.5*rt,2.5+0.5*rt,0],
@@ -1229,23 +1222,14 @@ class archimedean_tilings:
                                   [0,0,0],[rt,0,0],                 [1+rt,0,0],[1+2*rt,0,0]
                                               ])*a
         """
-        self.position = np.array(
-            [[0.5 * rt, 0.5, 0],
-             [1 + 1.5 * rt, 0.5, 0],
-             [-0.5, 2 + 0.5 * rt, 0],
-             [0.5 + rt, 2 + 0.5 * rt, 0],
-             [-0.5, 3 + 0.5 * rt, 0],
-             [0.5 * rt, 2.5 + rt, 0],
-             [0.5 + 0.5 * rt, 2.5 + 0.5 * rt, 0],
-             [0.5 + 1.5 * rt, 2.5 + 0.5 * rt, 0],
-             [-0.5 - 0.5 * rt, 1.5 + 0.5 * rt, 0],
-             [-0.5 + 0.5 * rt, 1.5 + 0.5 * rt, 0],
-             [0.5 * rt, 1.5, 0],
-             [0.5 + rt, 1 + 0.5 * rt, 0],
-             [1 + rt, 1, 0],
-             [1 + 2 * rt, 1, 0],
-             [0, 0, 0],
-             [rt, 0, 0],]) * a
+        self.position = np.array([[0.5*rt,0.5,0],[1+1.5*rt,0.5,0],[-0.5,2+0.5*rt,0],[0.5+rt,2+0.5*rt,0],
+                                                     [-0.5,3+0.5*rt,0],                   [0.5*rt,2.5+rt,0],
+                                                                                            [0.5+0.5*rt,2.5+0.5*rt,0],[0.5+1.5*rt,2.5+0.5*rt,0],
+                                  [-0.5-0.5*rt,1.5+0.5*rt,0],[-0.5+0.5*rt,1.5+0.5*rt,0],    
+
+                                                    [0.5*rt,1.5,0], [0.5+rt,1+0.5*rt,0],
+                                                                    [1+rt,1,0],[1+2*rt,1,0],
+                                  [0,0,0],[rt,0,0],                                                 ])*a
 
     def generate_type6(self, a=1):
         R"""
@@ -1325,7 +1309,7 @@ class archimedean_tilings:
         self.a3 = np.array([0, 0, 0])
         # dimensions=2
         self.position = np.array([[0, 0.5*rt, 0], [0, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
                                   [0.5*rt, 0, 0], [1+0.5*rt, 0, 0]])*a
 
     def generate_type6_part(self, a=1):
@@ -1407,22 +1391,10 @@ class archimedean_tilings:
         # dimensions=2
         # raw 2*2 superlattice
         self.position = np.array(
-            [[0, 1 + 1.5 * rt, 0],
-             [0, 2 + 1.5 * rt, 0],
-             [1 + rt, 1 + 1.5 * rt, 0],
-             [1 + rt, 2 + 1.5 * rt, 0],
-             [0.5 * rt, 1 + rt, 0],
-             [1 + 0.5 * rt, 1 + rt, 0],
-             [1 + 1.5 * rt, 1 + rt, 0],
-             [2 + 1.5 * rt, 1 + rt, 0],
-             [0, 0.5 * rt, 0],
-             [0, 1 + 0.5 * rt, 0],
-             [1 + rt, 0.5 * rt, 0],
-             [1 + rt, 1 + 0.5 * rt, 0],
-             [0.5 * rt, 0, 0],
-             [1 + 0.5 * rt, 0, 0],
-             [1 + 1.5 * rt, 0, 0],
-             [2 + 1.5 * rt, 0, 0]]) * a
+            [[0, 1 + 1.5 * rt, 0],[0, 2 + 1.5 * rt, 0],[1 + rt, 1 + 1.5 * rt, 0],[1 + rt, 2 + 1.5 * rt, 0],
+             [0.5 * rt, 1 + rt, 0],[1 + 0.5 * rt, 1 + rt, 0],[1 + 1.5 * rt, 1 + rt, 0],[2 + 1.5 * rt, 1 + rt, 0],
+             [0, 0.5 * rt, 0], [0, 1 + 0.5 * rt, 0],[1 + rt, 0.5 * rt, 0],[1 + rt, 1 + 0.5 * rt, 0],
+             [0.5 * rt, 0, 0],[1 + 0.5 * rt, 0, 0],[1 + 1.5 * rt, 0, 0],[2 + 1.5 * rt, 0, 0]]) * a
 
     def generate_type6_superlattice_center_fill(self, a=1):
         R"""
@@ -1463,26 +1435,13 @@ class archimedean_tilings:
         # dimensions=2
         # raw 2*2 superlattice
         self.position = np.array(
-            [[0, 1 + 1.5 * rt, 0],
-             [0, 2 + 1.5 * rt, 0],
-             [1 + rt, 1 + 1.5 * rt, 0],
-             [1 + rt, 2 + 1.5 * rt, 0],
-             [0.5 + 0.5 * rt, 1.5 + 1.5 * rt, 0],
-             [1.5 + 1.5 * rt, 1.5 + 1.5 * rt, 0],
-             [0.5 * rt, 1 + rt, 0],
-             [1 + 0.5 * rt, 1 + rt, 0],
-             [1 + 1.5 * rt, 1 + rt, 0],
-             [2 + 1.5 * rt, 1 + rt, 0],
-             [0, 0.5 * rt, 0],
-             [0, 1 + 0.5 * rt, 0],
-             [1 + rt, 0.5 * rt, 0],
-             [1 + rt, 1 + 0.5 * rt, 0],
-             [0.5 + 0.5 * rt, 0.5 + 0.5 * rt, 0],
-             [1.5 + 1.5 * rt, 0.5 + 0.5 * rt, 0],
-             [0.5 * rt, 0, 0],
-             [1 + 0.5 * rt, 0, 0],
-             [1 + 1.5 * rt, 0, 0],
-             [2 + 1.5 * rt, 0, 0]]) * a
+            [[0, 1 + 1.5 * rt, 0],[0, 2 + 1.5 * rt, 0],[1 + rt, 1 + 1.5 * rt, 0],[1 + rt, 2 + 1.5 * rt, 0],
+                    [0.5+0.5*rt,1.5+1.5*rt,0],           [1.5+1.5*rt,1.5+1.5*rt,0],
+             [0.5 * rt, 1 + rt, 0],[1 + 0.5 * rt, 1 + rt, 0],[1 + 1.5 * rt, 1 + rt, 0],[2 + 1.5 * rt, 1 + rt, 0],
+
+             [0, 0.5 * rt, 0], [0, 1 + 0.5 * rt, 0],[1 + rt, 0.5 * rt, 0],[1 + rt, 1 + 0.5 * rt, 0],
+                   [0.5+0.5*rt,0.5+0.5*rt,0],           [1.5+1.5*rt,0.5+0.5*rt,0],
+             [0.5 * rt, 0, 0],[1 + 0.5 * rt, 0, 0],[1 + 1.5 * rt, 0, 0],[2 + 1.5 * rt, 0, 0]]) * a
 
     def generate_type6_part_superlattice(self, a=1):
         R"""
@@ -1529,11 +1488,11 @@ class archimedean_tilings:
         """
         self.position = np.array(
             [[0, 1 + 1.5 * rt, 0],                      [1 + rt, 2 + 1.5 * rt, 0],
-             [1 + 0.5 * rt, 1 + rt, 0], [1 + 1.5 * rt, 1 + rt, 0],
-             [0, 1 + 0.5 * rt, 0], [1 + rt, 0.5 * rt, 0],
+                    [1 + 0.5 * rt, 1 + rt, 0], [1 + 1.5 * rt, 1 + rt, 0],
+                    [0, 1 + 0.5 * rt, 0], [1 + rt, 0.5 * rt, 0],
              [0.5 * rt, 0, 0],                          [2 + 1.5 * rt, 0, 0]]) * a
 
-    def generate_type6_part_superlattice_center_fill(self, a=1):
+    def generate_type6_part_superlattice_center_fill(self,a=1):
         R"""
         Introduction:
             (4,8^2) squares and octagons.
@@ -1565,11 +1524,11 @@ class archimedean_tilings:
             self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
         """
         rt = math.sqrt(2)
-        # N=12
-        self.a1 = np.array([2+2*rt, 0, 0])*a
-        self.a2 = np.array([0, 2+2*rt, 0])*a
-        self.a3 = np.array([0, 0, 0])
-        # dimensions=2
+        #N=12
+        self.a1 = np.array([2+2*rt,0,0])*a
+        self.a2 = np.array([0,2+2*rt,0])*a
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
         """#raw 2*2 superlattice
         self.position = np.array([[0,1+1.5*rt,0],[0,2+1.5*rt,0],      [1+rt,1+1.5*rt,0],[1+rt,2+1.5*rt,0],
                                   [0.5*rt,1+rt,0],[1+0.5*rt,1+rt,0],  [1+1.5*rt,1+rt,0],[2+1.5*rt,1+rt,0],
@@ -1578,13 +1537,13 @@ class archimedean_tilings:
         """
         self.position = np.array(
             [
-                [0, 1+1.5*rt, 0],                                      [1+rt, 2+1.5*rt, 0],
-                [0.5+0.5*rt, 1.5+1.5*rt, 0],          [1.5+1.5*rt, 1.5+1.5*rt, 0],
-                [1+0.5*rt, 1+rt, 0],  [1+1.5*rt, 1+rt, 0],
-                [0, 1+0.5*rt, 0],        [1+rt, 0.5*rt, 0],
-                [0.5+0.5*rt, 0.5+0.5*rt, 0],          [1.5+1.5*rt, 0.5+0.5*rt, 0],
-                [0.5*rt, 0, 0],                                         [2+1.5*rt, 0, 0]])*a
-
+             [0,1+1.5*rt,0],                                      [1+rt,2+1.5*rt,0],
+                    [0.5+0.5*rt,1.5+1.5*rt,0],          [1.5+1.5*rt,1.5+1.5*rt,0],
+                            [1+0.5*rt,1+rt,0],  [1+1.5*rt,1+rt,0],
+                            [0,1+0.5*rt,0],        [1+rt,0.5*rt,0], 
+                    [0.5+0.5*rt,0.5+0.5*rt,0],          [1.5+1.5*rt,0.5+0.5*rt,0],
+             [0.5*rt,0,0],                                         [2+1.5*rt,0,0] ])*a
+    
     def generate_type5(self, a=1):
         R"""
         Introduction:
@@ -1670,7 +1629,7 @@ class archimedean_tilings:
                                   [0.5*rt, 1.5+rt, 0], [1+0.5*rt, 1.5+rt, 0],
                                   [0, 1+rt, 0], [1+rt, 1+rt, 0],
                                   [-0.5, 1+0.5*rt, 0], [1.5+rt, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
                                   [-0.5, 0.5*rt, 0], [1.5+rt, 0.5*rt, 0],
                                   [0, 0, 0], [1+rt, 0, 0]])*a
 
@@ -1756,11 +1715,11 @@ class archimedean_tilings:
         self.a3 = np.array([0, 0, 0])
         # dimensions=2
         self.position = np.array([[-1.5, 1+1.5*rt, 0],
-                                  [1+0.5*rt, 1.5+rt, 0],
+                                                       [1+0.5*rt, 1.5+rt, 0],
                                   [0, 1+rt, 0],
-                                  [1.5+rt, 1+0.5*rt, 0],
+                                                       [1.5+rt, 1+0.5*rt, 0],
                                   [-0.5, 0.5*rt, 0],
-                                  [1+rt, 0, 0]])*a
+                                            [1+rt, 0, 0]])*a
 
     def generate_type5_part_half_center_fill(self, a=1):
         R"""
@@ -1800,14 +1759,14 @@ class archimedean_tilings:
         self.a3 = np.array([0, 0, 0])
         # dimensions=2
         self.position = np.array([[-1.5, 1+1.5*rt, 0],
-                                  [1+0.5*rt, 1.5+rt, 0],
+                                                       [1+0.5*rt, 1.5+rt, 0],
                                   [0, 1+rt, 0],
-                                  [1.5+rt, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
+                                                       [1.5+rt, 1+0.5*rt, 0],
+                                            [0.5+0.5*rt,0.5+0.5*rt,0],
                                   [-0.5, 0.5*rt, 0],
-                                  [1+rt, 0, 0]])*a
-
-    def generate_type5_part_center_fill(self, a=1):
+                                                    [1+rt, 0, 0]])*a
+        
+    def generate_type5_part_center_fill(self,a=1):
         R"""
         Introduction:
             (4,6,12) squares, hexagons and dodecagons.
@@ -1839,19 +1798,19 @@ class archimedean_tilings:
             self.system = hoomd.init.create_lattice(unitcell=uc, n=n);
         """
         rt = RT
-        # N=12
-        self.a1 = np.array([3+rt, 0, 0])*a
-        self.a2 = np.array([-1.5-0.5*rt, 1.5+1.5*rt, 0])*a  # (rt+3)*0.5
-        self.a3 = np.array([0, 0, 0])
-        # dimensions=2
-        self.position = np.array([[-1.5, 1+1.5*rt, 0],
-                                  [0.5*rt, 1.5+rt, 0], [1+0.5*rt, 1.5+rt, 0],
-                                  [0, 1+rt, 0], [1+rt, 1+rt, 0],
-                                  [-0.5, 1+0.5*rt, 0], [1.5+rt, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
-                                  [-0.5, 0.5*rt, 0], [1.5+rt, 0.5*rt, 0],
-                                  [0, 0, 0], [1+rt, 0, 0]])*a
-
+        #N=12
+        self.a1 = np.array([3+rt,0,0])*a
+        self.a2 = np.array([-1.5-0.5*rt,1.5+1.5*rt,0])*a#(rt+3)*0.5
+        self.a3 = np.array([0,0,0])
+        #dimensions=2
+        self.position = np.array([[-1.5,1+1.5*rt,0],
+                                  [0.5*rt,1.5+rt,0],[1+0.5*rt,1.5+rt,0],
+                                  [0,1+rt,0],[1+rt,1+rt,0],
+                                  [-0.5,1+0.5*rt,0],[1.5+rt,1+0.5*rt,0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
+                                  [-0.5,0.5*rt,0],[1.5+rt,0.5*rt,0],   
+                                  [0,0,0],[1+rt,0,0]])*a
+    
     def generate_type4(self, a=1):
         R"""
         Introduction:
@@ -1933,7 +1892,7 @@ class archimedean_tilings:
         # dimensions=2
         self.position = np.array([[-1, 1+rt, 0], [0, 1+rt, 0],
                                   [-0.5, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
                                   [-0.5, 0.5*rt, 0],
                                   [0, 0, 0], [1+rt, 0, 0]])*a
 
@@ -2018,7 +1977,7 @@ class archimedean_tilings:
         # dimensions=2
         self.position = np.array([[-1, 1+rt, 0],
                                   [-0.5, 1+0.5*rt, 0],
-                                  [0.5+0.5*rt, 0.5+0.5*rt, 0],
+                                        [0.5+0.5*rt,0.5+0.5*rt,0],
 
                                   [0, 0, 0], [1+rt, 0, 0]])*a
 
@@ -2173,40 +2132,6 @@ class archimedean_tilings:
         # dimensions=2
         self.position = np.array([[0, 0, 0], [0.5, 0.5*rt, 0]])*a
 
-    def generate_cairo(self, a):  # let the edge lengths of pentagons are 0.5*[1+sqrt(3)] or 1
-        # RT = math.sqrt(3)
-        # uc = hoomd.lattice.unitcell
-        # N=12,
-        self.a1 = np.array([0.5*(6+2*RT), 0, 0])*a
-        self.a2 = np.array([0, 0.5*(6+2*RT), 0])*a
-        self.a3 = np.array([0, 0, 0])
-        # the shape is a bow upward /--\_ where edge of square & triangle is 2*sqrt(3)
-        self.position = np.array([
-            [0, 0, 0], [0.5*(4+2*RT), 0, 0],
-            [0.5*(2+RT), 0.5, 0],
-            [0.5*(0.5+0.5*RT), 0.5*(1.5+0.5*RT), 0], [0.5*(3.5+1.5*RT), 0.5*(1.5+0.5*RT), 0],
-            [0.5*(1+RT), 0.5*(3+RT), 0], [0.5*(3+RT), 0.5*(3+RT), 0],
-            [0.5*(0.5+0.5*RT), 0.5*(4.5+1.5*RT), 0], [0.5*(3.5+1.5*RT), 0.5*(4.5+1.5*RT), 0],
-            [0.5*(2+RT), 0.5*(5+2*RT), 0],
-            [0.5*(5+2*RT), 0.5*(2+RT), 0], [0.5*(5+2*RT), 0.5*(4+RT), 0],
-        ])*a
-
-    def generate_cairo_part(self, a):  # let the edge lengths of pentagons are 0.5*[1+sqrt(3)] or 1
-        # RT = math.sqrt(3)
-        # uc = hoomd.lattice.unitcell
-        # N=8,
-        self.a1 = np.array([0.5*(6+2*RT), 0, 0])*a
-        self.a2 = np.array([0, 0.5*(6+2*RT), 0])*a
-        self.a3 = np.array([0, 0, 0])
-        # the shape is a bow upward /--\_ where edge of square & triangle is 2*sqrt(3)
-        self.position = np.array([
-            [0, 0, 0], [0.5*(4+2*RT), 0, 0],
-            [0.5*(2+RT), 0.5, 0],
-            [0.5*(1+RT), 0.5*(3+RT), 0], [0.5*(3+RT), 0.5*(3+RT), 0],
-            [0.5*(2+RT), 0.5*(5+2*RT), 0],
-            [0.5*(5+2*RT), 0.5*(2+RT), 0], [0.5*(5+2*RT), 0.5*(4+RT), 0],
-        ])*a
-
     def generate_type_n(self, type_n, a=1):
         if (type_n) == 1:
             self.generate_type1(a)
@@ -2230,8 +2155,6 @@ class archimedean_tilings:
             self.generate_type10(a)
         elif (type_n) == 11:
             self.generate_type11(a)
-        elif (type_n) == 12:
-            self.generate_cairo(a)
         elif (type_n) == 91:
             self.generate_type9_rect(a)
         elif (type_n) == 62:
@@ -2261,8 +2184,8 @@ class archimedean_tilings:
         elif (type_n) == 4:
             self.generate_type4_part(a)
         elif (type_n) == 5:
-            # self.generate_type5_part_1(a)
-            self.generate_type5_part_half(a)  # 20240531 update
+            #self.generate_type5_part_1(a)
+            self.generate_type5_part_half(a)#20240531 update
         elif (type_n) == 6:
             self.generate_type6_part(a)
         elif (type_n) == 7:
@@ -2275,8 +2198,6 @@ class archimedean_tilings:
             self.generate_type10_part(a)
         elif (type_n) == 11:
             self.generate_type11_part(a)
-        elif (type_n) == 12:
-            self.generate_cairo_part(a)
         elif (type_n) == 91:
             self.generate_type9_part_rect(a)
         elif (type_n) == 62:
@@ -2288,8 +2209,7 @@ class archimedean_tilings:
         elif (type_n) == 43:
             self.generate_type4_part_center_fill(a)
         elif (type_n) == 53:
-            # 20240623update,generate_type5_part_center_fill(a)
-            self.generate_type5_part_half_center_fill(a)
+            self.generate_type5_part_half_center_fill(a)#20240623update,generate_type5_part_center_fill(a)
         elif (type_n) == 63:
             self.generate_type6_part_superlattice_center_fill(a)
         elif (type_n) == 73:
@@ -2714,8 +2634,8 @@ class show_dual_lattice:
                 pointsb, list_bond_index, bond_color='silver', particle_size=1)
             del atb
         ax.set_aspect('equal', 'box')
-        ax.set_xlim([-xylim, xylim])
-        ax.set_ylim([-xylim, xylim])
+        # ax.set_xlim([-xylim, xylim])
+        # ax.set_ylim([-xylim, xylim])
         fig.savefig(png_filename, bbox_inches='tight')
         plt.close('all')
         np.savetxt(txt_file_name, points)
@@ -2818,7 +2738,7 @@ class show_dual_lattice:
         fig.savefig(png_filename, bbox_inches='tight')
         plt.close('all')
         del at
-
+    
     def show_dual_type_n_part_3(self, type_n, xylim=5, bond_on=True, n_plus=2):
         R"""
         intorduction:
@@ -2840,10 +2760,10 @@ class show_dual_lattice:
         n1 = int(np.around(2*xylim/vec[0], 0)+n_plus)
         n2 = int(np.around(2*xylim/vec[1], 0)+n_plus)
         points = at.generate_lattices([n1, n2])  # 1.73:2
-        # dula = at.get_dual_lattice(points)
+        #dula = at.get_dual_lattice(points)
         fig, ax = plt.subplots()
         ax.scatter(points[:, 0], points[:, 1], color='k', zorder=3)
-        # ax.scatter(dula[:, 0], dula[:, 1], facecolors='white', edgecolors='k', zorder=3)
+        #ax.scatter(dula[:, 0], dula[:, 1], facecolors='white', edgecolors='k', zorder=3)
         # draw bonds selected
         if bond_on:
             atb = archimedean_tilings()

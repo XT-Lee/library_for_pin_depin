@@ -31,6 +31,15 @@
 - particle_decorate
 
 ## log:
+- 20240913 in workflow_analysis_achimedean.archimedean_tilings.
+			add generate_cairo_part,generate_cairo
+			edit generate_type_n,generate_type_n_part
+- 20240419 in workflow_analysis_achimedean,
+			edit generate_type_n_part, 
+			add generate_type5_part_center_fill,
+			add generate_type6_part_superlattice_center_fill,
+			add generate_type7_part_superlattice_center_fill,
+			add generate_type9_part_superlattice_center_fill,
 - 20240319 add plot_background in points_analysis_2D.bond_plot_module.
 			edit save_feature in particle_tracking.particle_track
 			add tune_pix2um, tune_um2pix in get_a_from_image.show_points_select
